@@ -1,40 +1,47 @@
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+// const { createError } = require('../utils/error');
 
-exports.postRegister = async (req, res, next) => {
+const createError = require('http-errors');
+
+exports.register = async (req, res, next) => {
   try {
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(req.body.password, salt);
+
     const newUser = new User({
       username: req.body.username,
-      password: hash,
       fullName: req.body.fullName,
-      phoneNumber: req.body.phoneNumber,
       email: req.body.email,
+      phone: req.body.phone,
+      password: hash,
       isAdmin: req.body.isAdmin,
     });
 
     await newUser.save();
-    res.status(200).send('Add new user');
+    // res.setHeader('Set-cookie', 'isLogin=true; Max-Age=10 ');
+    // res.setHeader('Set-cookie', 'isLogin=true');
+    // res.status(200).send('Add new user');
+    res.send('Auth');
   } catch (error) {
     next(error);
   }
 };
 
+exports.getLogin = async (req, res, next) => {};
+
 exports.postLogin = async (req, res, next) => {
+  // req.session.isLoggedIn = true;
+
   try {
     const user = await User.findOne({ username: req.body.username });
-    if (!user) {
-      // next(createError(404, 'User not found!'))
-      res.status(200).send('Not found user');
-    }
+    if (!user) return next(createError(404, 'User not found'));
+
     const isPasswordCorrect = await bcrypt.compare(
       req.body.password,
       user.password
     );
-    console.log('login:::', user);
-    console.log(isPasswordCorrect);
     if (!isPasswordCorrect)
       return next(createError(400, 'Wrong password or username!'));
 
@@ -42,12 +49,21 @@ exports.postLogin = async (req, res, next) => {
       { id: user._id, isAdmin: user.isAdmin },
       process.env.JWT
     );
-    const { password, isAdmin, ...otherDetail } = user._doc;
+    console.log('token :>> ', token);
+    const { password, isAdmin, ...otherDetails } = user._doc;
+
     res
-      .cookies('access_token', token, { httpOnly: true })
+      .cookie('token', token, {
+        httpOnly: true,
+      })
       .status(200)
-      .json({ ...otherDetail });
-  } catch (error) {
-    next(error);
+      .json( {...otherDetails, isAdmin });
+  } catch (err) {
+    next(err);
   }
+};
+exports.logout = (req, res, next) => {
+  req.session.destroy(() => {
+    res.redirect('/');
+  });
 };

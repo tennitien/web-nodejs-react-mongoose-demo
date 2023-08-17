@@ -1,8 +1,9 @@
 import useFetch from '../../hooks/useFetch';
+import {hotelsApi} from '../../api/apiConfig'
 import './propertyList.css';
 
 const PropertyList = () => {
-  const { data, loading } = useFetch('/hotels/countByType');
+  const { data, loading } = useFetch(hotelsApi.countByType);
   const imgs = [
     'https://cf.bstatic.com/xdata/images/xphoto/square300/57584488.webp?k=bf724e4e9b9b75480bbe7fc675460a089ba6414fe4693b83ea3fdd8e938832a6&o=',
     'https://cf.bstatic.com/static/img/theme-index/carousel_320x240/card-image-apartments_300/9f60235dc09a3ac3f0a93adbc901c61ecd1ce72e.jpg',

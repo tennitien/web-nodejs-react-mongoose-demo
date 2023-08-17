@@ -1,53 +1,56 @@
-import "./searchItem.css";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import './searchItem.css';
+import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
+import { Link, useNavigate } from 'react-router-dom';
 
-const SearchItem = ({
-  name,
-  distance,
-  tag,
-  type,
-  description,
-  free_cancel,
-  price,
-  rate,
-  rate_text,
-  img_url,
-}) => {
+const SearchItem = ({ item }) => {
+  let name = item.name;
+  // let title = item.title;
+  let address = item.address;
+  let distance = item.distance;
+  let description = item.desc;
+  let price = item.cheapestPrice;
+  let rate = item.rating;
+  let img = item.photos[0];
+  let tagFree = 'Free airport taxi';
+  let includes = 'Includes taxes and fees';
+
+  const navigate = useNavigate();
+  const handleDetail = () => {
+    navigate(`${item._id}`);
+  };
   return (
-    <div className="searchItem">
-      <img
-        src={img_url}
-        alt=""
-        className="siImg"
-      />
-      <div className="siDesc">
-        <h1 className="siTitle">{name}</h1>
-        <span className="siDistance">{distance} from center</span>
-        <span className="siTaxiOp">{tag}</span>
-        <span className="siSubtitle">
-          {description}
+    <div className='searchItem'>
+      <img src={img} alt='' className='siImg' />
+      <div className='siDesc'>
+        <h1 className='siTitle'>{name}</h1>
+        <span className='siDistance'>{distance} from center</span>
+        <span className='siTaxiOp'>{tagFree}</span>
+        <span className='siSubtitle'>
+          <FontAwesomeIcon icon={faLocationDot} /> {address}
         </span>
-        <span className="siFeatures">
-          {type}
-        </span>
+        <span className='siFeatures'>{description}</span>
         {/* If can cancel */}
-        {free_cancel ? (
-          <div>
-            <span className="siCancelOp">Free cancellation </span>
-            <span className="siCancelOpSubtitle">
-              You can cancel later, so lock in this great price today!
-            </span>
-          </div>
-        ) : (<div></div>)}
-      </div>
-      <div className="siDetails">
-        <div className="siRating">
-          <span>{rate_text}</span>
-          <button>{rate}</button>
+
+        <div>
+          <p className='siCancelOp'>Free cancellation </p>
+          <p className='siCancelOpSubtitle'>
+            You can cancel later, so lock in this great price today!
+          </p>
         </div>
-        <div className="siDetailTexts">
-          <span className="siPrice">${price}</span>
-          <span className="siTaxOp">Includes taxes and fees</span>
-          <button className="siCheckButton">See availability</button>
+      </div>
+      <div className='siDetails'>
+        <div className='siRating'>
+          <button>
+            Rating ⭐️ : <span>{rate} </span>
+          </button>
+        </div>
+        <div className='siDetailTexts'>
+          <span className='siPrice'>${price}</span>
+          <span className='siTaxOp'>{includes}</span>
+          <button className='siCheckButton' onClick={handleDetail}>
+            See availability
+          </button>
         </div>
       </div>
     </div>

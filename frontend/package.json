@@ -8,6 +8,7 @@
     "@fortawesome/free-regular-svg-icons": "^6.1.1",
     "@fortawesome/free-solid-svg-icons": "^6.1.1",
     "@fortawesome/react-fontawesome": "^0.1.18",
+    "@hookform/resolvers": "^3.2.0",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.1.1",
     "@testing-library/user-event": "^13.5.0",
@@ -16,9 +17,11 @@
     "react": "^18.0.0",
     "react-date-range": "^1.4.0",
     "react-dom": "^18.0.0",
-    "react-router-dom": "^6.3.0",
+    "react-hook-form": "^7.45.4",
+    "react-router-dom": "^6.15.0",
     "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "yup": "^1.2.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -44,5 +47,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy":"http://localhost:5000/api"
+  "proxy": "http://localhost:5000/api"
 }

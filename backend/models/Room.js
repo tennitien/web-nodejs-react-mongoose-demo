@@ -12,6 +12,7 @@ const RoomSchema = new mongoose.Schema({
   maxPeople: { type: Number, require: true },
   desc: { type: String, require: true },
   roomNumbers: [Number],
+  hotelId: { type: mongoose.ObjectId, ref: 'Hotel' },
 });
 
 module.exports = mongoose.model('Room', RoomSchema);

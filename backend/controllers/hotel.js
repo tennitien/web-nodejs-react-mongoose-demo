@@ -1,4 +1,5 @@
 const Hotel = require('../models/Hotel');
+const Room = require('../models/Room');
 // admin them>xoa>xem Hotel & Room **Update
 
 exports.createHotel = async (req, res, next) => {
@@ -15,20 +16,34 @@ exports.createHotel = async (req, res, next) => {
 // updateHotel
 exports.updatedHotel = async (req, res, next) => {
   try {
+    console.log('req.params.id :>> ', req.params.id);
     const updatedHotel = await Hotel.findByIdAndUpdate(
-      req.param.id,
+      req.params.id,
       { $set: req.body },
       { new: true }
     );
+    res.status(200).json(updatedHotel);
   } catch (error) {
     next(error);
   }
 };
-
+exports.deleteHotel = async (req, res, next) => {
+  try {
+    await Hotel.findByIdAndDelete(req.params.id);
+    res.status(200).json('Hotel has been deleted.');
+  } catch (err) {
+    next(err);
+  }
+};
+//
 exports.getHotel = async (req, res, next) => {
   try {
     const hotel = await Hotel.findById(req.params.id);
-    res.status(200).json(hotel);
+    res.status(200).json({
+      status: 'success',
+      result: 1,
+      data: hotel,
+    });
   } catch (err) {
     next(err);
   }
@@ -38,6 +53,7 @@ exports.getHotels = async (req, res, next) => {
   const { city, option, min, max } = req.query;
   try {
     //  api/hotels?city=Ha Noi&option=cheapestPrice&min=100&max=300
+
     const hotels = await Hotel.find({ city: { $regex: city, $options: 'i' } })
       .where(option)
       .gte(min || 1)
@@ -72,10 +88,9 @@ exports.sortBy = async (req, res, next) => {
 };
 exports.countByCity = async (req, res, next) => {
   try {
-    const haNoiCount = await Hotel.countDocuments({ city: 'Ha Noi' });
+    const haNoiCount = await Hotel.find({ city: 'Ha Noi' }).count();
     const daNangCount = await Hotel.countDocuments({ city: 'Da Nang' });
     const hcmCount = await Hotel.countDocuments({ city: 'Ho Chi Minh' });
-
     res.status(200).json({
       status: 'success',
       result: 3,
@@ -112,4 +127,20 @@ exports.countByType = async (req, res, next) => {
   } catch (err) {
     next(err);
   }
+};
+
+// rooms
+exports.getHotelRooms = async (req, res, next) => {
+  try {
+    const hotel = await Hotel.findById(req.params.hotelid);
+    const list = await Promise.all(
+      hotel.rooms.map((room) => Room.findById(room))
+    );
+
+    res.status(200).json({
+      status: 'success',
+      result: list.length,
+      data: [...list],
+    });
+  } catch (error) {}
 };
