@@ -1,8 +1,8 @@
-.formBook {
+.reserve {
   display: grid;
   grid-template-columns: 1fr 2fr;
   -moz-column-gap: 2em;
-  column-gap: 2em;
+       column-gap: 2em;
   row-gap: 2em;
   grid-template-rows: repeat(auto-fit, minmax(250px, 1fr));
 }
@@ -12,41 +12,57 @@
 }
 
 .rooms {
-  display: flex;
-  justify-content: space-between;
-  gap: 2em;
   margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  -moz-column-gap: 3em;
+       column-gap: 3em;
+  row-gap: 1em;
 }
 
-.roomInfo {
+.room {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 2em;
 }
-.roomInfo .roomDesc .title {
-  font-weight: 500;
+.room .roomDesc .title {
+  font-weight: 600;
+  font-size: 20px;
+  margin-bottom: 5px;
 }
-.roomInfo .roomDesc .people {
+.room .roomDesc .people {
   font-size: 13px;
 }
-.roomInfo .roomDesc .price {
+.room .roomDesc .price {
   font-size: 18px;
   font-weight: 600;
 }
-.roomInfo .room {
+.room .roomNumbers {
   display: flex;
   gap: 10px;
 }
-.roomInfo .room .formCheckbox {
+.room .roomNumbers .formCheckbox {
   display: flex;
   flex-direction: column;
 }
-.roomInfo .room .formCheckbox label {
+.room .roomNumbers .formCheckbox label {
   opacity: 0.7;
 }
 
 .bill {
-  background-color: bisque;
   grid-column: 1/-1;
-} /*# sourceMappingURL=formBook.css.map */
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+}
+.bill-title {
+  grid-column: 1/-1;
+}
+.bill .select {
+  width: 100%;
+  text-align: center;
+  background-color: #ddd;
+  border-radius: 3px;
+  border: solid 1px #ccc;
+}/*# sourceMappingURL=reserve.css.map */

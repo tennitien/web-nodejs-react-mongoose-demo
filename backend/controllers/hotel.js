@@ -144,3 +144,12 @@ exports.getHotelRooms = async (req, res, next) => {
     });
   } catch (error) {}
 };
+
+exports.f= async (req, res, next) => {
+      
+  try {
+    
+  } catch (error) {
+    
+  }
+};

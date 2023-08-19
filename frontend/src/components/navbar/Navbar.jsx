@@ -1,7 +1,7 @@
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import './navbar.css';
 import { useContext } from 'react';
-import { AuthContext } from '../../context/AuthContext';
+import { AuthContext, AuthActions } from '../../context/AuthContext';
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -10,27 +10,43 @@ const Navbar = () => {
   const isHideNav =
     location.pathname === '/register' || location.pathname === '/login';
 
+  const { user, dispatch } = useContext(AuthContext);
+
   const register = () => navigate('/register');
   const login = () => navigate('/login');
-  const { username } = useContext(AuthContext);
+  const transactions = () => navigate('/login');
+  const logout = () => dispatch({ type: AuthActions.logout });
 
-  const NavItem = (
+  const LoginItem = (
     <div className='navItems'>
+      {/* {user.email && user.email} */}
       <button className='navButton' onClick={register}>
-        Register
+        Sign Up
       </button>
       <button className='navButton' onClick={login}>
         Login
       </button>
     </div>
   );
+  const UserItem = (
+    <div className='navItems'>
+      <span>{user && user.email}</span>
+      <button className='navButton' onClick={transactions}>
+        Transactions
+      </button>
+      <button className='navButton' onClick={logout}>
+        Logout
+      </button>
+    </div>
+  );
+
   return (
     <div className='navbar'>
       <div className='navContainer'>
         <Link to={'/'} className='logo'>
           Booking Website
         </Link>
-        {username ? username.email : <NavItem />}
+        {user ? UserItem : LoginItem}
       </div>
     </div>
   );

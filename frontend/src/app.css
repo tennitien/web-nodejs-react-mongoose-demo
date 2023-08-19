@@ -3,7 +3,11 @@
   flex-direction: column;
   gap: 8px;
   margin: 10px auto;
-  width: 60%;
+  width: 100%;
+}
+.formControl label span {
+  font-size: 12px;
+  opacity:0.8
 }
 .formControl input {
   border: none;

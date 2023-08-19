@@ -21,17 +21,17 @@ const useFetch = url => {
 
     fetchData();
 
-    const reFetch = async () => {
-      setLoading(true);
-      try {
-        const result = await axios.get(url);
-        setData(result.data);
-      } catch (error) {
-        setError(error);
-      }
+    // const reFetch = async () => {
+    //   setLoading(true);
+    //   try {
+    //     const result = await axios.get(url);
+    //     setData(result.data);
+    //   } catch (error) {
+    //     setError(error);
+    //   }
 
-      setLoading(false);
-    };
+    //   setLoading(false);
+    // };
   }, [url]);
 
   return { data, loading, error };

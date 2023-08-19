@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import './reserve.css';
 import { useState } from 'react';
 import { DateRange } from 'react-date-range';
@@ -8,6 +8,9 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import useFetch from '../../hooks/useFetch';
 import { hotelsApi } from '../../api/apiConfig';
+import { SearchContext } from '../../context/SearchContext';
+import { useParams } from 'react-router-dom';
+import { AuthContext } from '../../context/AuthContext';
 
 // validate Form
 const phoneRegExp =
@@ -27,54 +30,61 @@ const schema = yup.object({
 });
 // validate Form --end
 
-function Reserve({ hotelId, dates }) {
+function Reserve({ hotelId, priceDefault }) {
   const { data, loading, error } = useFetch(hotelsApi.getRooms(hotelId));
-  console.log('data :>> ', data);
-  // let desc = item.desc;
-  // let title = item.title;
-  // let price = item.price;
-  // let maxPeople = item.maxPeople;
-  // let roomNumbers = item.roomNumbers;
+  const { dates } = useContext(SearchContext);
+  const { username } = useContext(AuthContext);
   const [date, setDate] = useState([
     {
-      startDate: dates[0].startDate,
-      endDate: dates[0].endDate,
+      startDate: new Date(dates[0].startDate),
+      endDate: new Date(dates[0].endDate),
       key: 'selection',
     },
   ]);
 
-  // const [rooms, setRooms] = useState([]);
   const [dataForm, setDataForm] = useState({});
-  // const checkRoom = event => {
-  //   const { value, checked } = event.target;
-  //   if (checked) setRooms(prev => [...prev, value]);
-  //   else setRooms(prev => prev.filter(room => room !== value));
-  // };
+  const [totalBill, setTotalBill] = useState(0);
+
+  let defaultValues = {
+    name: username.fullName,
+    email: username.email,
+    phone: username.phone,
+    card: '',
+  };
+  const form = useForm({ defaultValues, resolver: yupResolver(schema) });
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
-    // defaultValues: {
-    //   name: '',
-    //   email: '',
-    //   phone: '',
-    //   card: '',
-    // },
-    resolver: yupResolver(schema),
-  });
+  } = form;
 
-  const onSubmit = data => {
-    console.log(data);
+  const onSubmit = input => {
+    const { name, email, phone, card, payment, ...rooms } = input;
     setDataForm({
-      ...data,
+      name,
+      email,
+      phone,
+      card,
+      payment,
+      rooms,
       startDate: date[0].startDate,
       endDate: date[0].endDate,
-      numberOfDay:
-        (date[0].endDate - date[0].startDate) / (1000 * 60 * 60 * 24),
+      diffDay:
+        (new Date(date[0].endDate) - new Date(date[0].startDate)) /
+          (1000 * 60 * 60 * 24) +
+        1,
     });
+    console.log('rooms :>> ', rooms);
+    let sum = 0;
+    for (const key in rooms) {
+      if (rooms[key].value) {
+        let quantity = rooms[key].value.length;
+        let price = rooms[key].price;
+        sum += price * quantity;
+      }
+    }
+    setTotalBill(sum)
   };
-
   return (
     <>
       {loading ? (
@@ -96,34 +106,43 @@ function Reserve({ hotelId, dates }) {
             <div className='formInfo'>
               <h2>Reserve Info</h2>
               <div className='formControl'>
-                <label>Your Full Name:</label>
+                <label>
+                  Your Full Name <span>*(required)</span>
+                </label>
                 <input {...register('name')} placeholder='Full Name' />
                 <p>{errors.name?.message}</p>
               </div>
               <div className='formControl'>
-                <label>Your Email:</label>
+                <label>
+                  Your Email <span>*(required)</span>
+                </label>
                 <input {...register('email')} placeholder='Email' />
                 <p>{errors.email?.message}</p>
               </div>
               <div className='formControl'>
-                <label>Your Phone Number:</label>
+                <label>
+                  Your Phone Number <span>*(required)</span>
+                </label>
                 <input {...register('phone')} placeholder='Phone Number' />
                 <p>{errors.phone?.message}</p>
               </div>
               <div className='formControl'>
-                <label>Your Identity Card Number</label>
-                <input {...register('card')} placeholder='Phone Number' />
+                <label>
+                  Your Identity Card Number <span>*(required)</span>
+                </label>
+                <input {...register('card')} placeholder='Your card number' />
                 <p>{errors.card?.message}</p>
               </div>
             </div>
             {/*//todo select */}
             <div className='selectRooms'>
               <h2>Select Room</h2>
+
               <div className='rooms'>
                 {data &&
-                  data.map(room => {
+                  data.map((room, i) => {
                     return (
-                      <div className='roomInfo'>
+                      <div className='room' key={i}>
                         <div className='roomDesc'>
                           <p className='title'>{room.title}</p>
                           <p>{room.desc}</p>
@@ -132,15 +151,21 @@ function Reserve({ hotelId, dates }) {
                           </p>
                           <p className='price'>${room.price}</p>
                         </div>
-                        <div className='room'>
+                        <div className='roomNumbers'>
                           {room &&
-                            room.roomNumbers.map(roomNumber => (
-                              <div className='formCheckbox'>
+                            room.roomNumbers.map((roomNumber, i) => (
+                              <div className='formCheckbox' key={i}>
                                 <label>{roomNumber}</label>
                                 <input
                                   type='checkbox'
-                                  value={{ roomNumber }}
-                                  {...register('rooms')}
+                                  value={roomNumber}
+                                  {...register(`${room._id}.value`)}
+                                />
+                                <input
+                                  type='text'
+                                  hidden={true}
+                                  value={room.price}
+                                  {...register(`${room._id}.price`)}
                                 />
                               </div>
                             ))}
@@ -150,14 +175,20 @@ function Reserve({ hotelId, dates }) {
                   })}
               </div>
             </div>
+            
             <div className='bill'>
-              <h2>Total Bill: ${}</h2>
-              <select {...register('payment')}>
+            <h2 className='bill-title'>Total Bill: ${totalBill* dataForm.diffDay || priceDefault }</h2>
+              <select {...register('payment')} className='select'>
+                <option value="hide">Select Payment Method</option>
                 <option value='cash'>cash</option>
                 <option value='credit'>credit</option>
                 <option value='other'>other</option>
               </select>
-              <input type='submit' />
+              
+              <div className="formAction">
+              <input type='submit' value='Reserve Now'/>
+              </div>
+
             </div>
           </div>
         </form>

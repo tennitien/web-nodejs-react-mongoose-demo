@@ -9,6 +9,7 @@ if (searchStore) {
   INITIAL_STATE = {
     city: null,
     dates: [],
+    diffDay:null,
     options: {
       adults: null,
       children: null,
@@ -24,7 +25,12 @@ export const SearchActions = {
 const SearchReducer = (state, action) => {
   switch (action.type) {
     case SearchActions.add:
-      return action.payload;
+      let value = action.payload;
+      let startDate = new Date(value.dates[0].startDate);
+      let endDate = new Date(value.dates[0].endDate);
+      let diffDay = (endDate - startDate) / (1000 * 60 * 60 * 24) + 1; //ONE DAY
+      value = { ...value, diffDay };
+      return value;
 
     case SearchActions.reset:
       return INITIAL_STATE;
@@ -38,6 +44,7 @@ export const SearchProvider = ({ children }) => {
   const value = {
     city: state.city,
     dates: state.dates,
+    diffDay: state.diffDay,
     options: state.options,
     dispatch,
   };
