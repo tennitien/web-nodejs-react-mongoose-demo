@@ -10,9 +10,14 @@ const mongoose = require('mongoose');
 
 const TransactionSchema = new mongoose.Schema({
   //   username: { type: String, required: true, unique: true },
-  user: { type: mongoose.ObjectId, required: true, ref: 'User' },
-  hotel: { type: mongoose.ObjectId, required: true, ref: 'Hotel' },
-  room: [Number],
+  userId: { type: mongoose.ObjectId, required: true, ref: 'User' },
+  hotelId: { type: mongoose.ObjectId, required: true },
+  rooms: [
+    {
+      roomId: mongoose.ObjectId,
+      roomNumbers: [Number],
+    },
+  ],
   dateStart: { type: Date, required: true },
   dateEnd: { type: Date, required: true },
   price: { type: Number, required: true },

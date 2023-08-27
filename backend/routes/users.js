@@ -13,16 +13,16 @@ router.get('/checkauth', verifyController.verifyToken);
 
 router.get(
   '/checkuser/:id',
-  verifyController.verifyToken,
+  // verifyController.verifyToken,
   verifyController.verifyUser
 );
 router.get(
   '/checkadmin/:id',
-  verifyController.verifyToken,
+  // verifyController.verifyToken,
   verifyController.verifyAdmin
 );
 
-router.delete(':/id', userController.deleteUser);
+router.delete('/:id', userController.deleteUser);
 // UPDATE
 router.put('/:id', userController.updateUser);
 

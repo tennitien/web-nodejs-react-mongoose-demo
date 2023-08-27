@@ -14,7 +14,7 @@ const Navbar = () => {
 
   const register = () => navigate('/register');
   const login = () => navigate('/login');
-  const transactions = () => navigate('/login');
+  const transactions = () => navigate(`/transaction/${user._id}`);
   const logout = () => dispatch({ type: AuthActions.logout });
 
   const LoginItem = (

@@ -1,9 +1,11 @@
-import { useState } from "react";
-import "./login.scss"
+import React, { useContext, useState } from 'react';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { AuthActions, AuthContext } from '../../context/AuthContext';
 
-const Login = () => {
+function Login() {
   const navigate=useNavigate()
+  const { user, loading, error, dispatch } = useContext(AuthContext);
 
   const [credential, setCredential] = useState({
     username: undefined,
@@ -13,12 +15,24 @@ const Login = () => {
   const handleInput = e => {
     setCredential(prev => ({ ...prev, [e.target.id]: e.target.value }));
   };
-  const handleLogin = e => {
-    setCredential(prev => ({ ...prev, [e.target.id]: e.target.value }));
+  const handleLogin = async e => {
+    e.preventDefault();
+    dispatch({ type: AuthActions.login_start });
+    try {
+      const result = await axios.post('/auth/login', credential);
+      dispatch({ type: AuthActions.login_success, payload: result.data });
+      navigate('/')
+    } catch (error) {
+      console.log('error :>> ', error);
+      dispatch({
+        type: AuthActions.login_failure,
+        payload: error.response.data,
+      });
+    }
   };
+
   return (
-    <div>
-       <div className='login'>
+    <div className='login'>
       <div className='lContainer'>
         <input
           type='text'
@@ -34,14 +48,13 @@ const Login = () => {
           onChange={handleInput}
           className='lInput'
         />
-        <button onClick={handleLogin} className='lButton' >
+        <button onClick={handleLogin} className='lButton' disabled={loading}>
           Login
         </button>
-        {/* {error && <span>{error.message}</span>} */}
+        {error && <span>{error.message}</span>}
       </div>
     </div>
-    </div>
-  )
+  );
 }
 
-export default Login
+export default Login;

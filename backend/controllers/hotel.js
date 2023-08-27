@@ -36,14 +36,10 @@ exports.deleteHotel = async (req, res, next) => {
   }
 };
 //
-exports.getHotel = async (req, res, next) => {
+exports.getHotelById = async (req, res, next) => {
   try {
     const hotel = await Hotel.findById(req.params.id);
-    res.status(200).json({
-      status: 'success',
-      result: 1,
-      data: hotel,
-    });
+    res.status(200).json(hotel);
   } catch (err) {
     next(err);
   }
@@ -51,19 +47,17 @@ exports.getHotel = async (req, res, next) => {
 
 exports.getHotels = async (req, res, next) => {
   const { city, option, min, max } = req.query;
+  let hotels;
   try {
     //  api/hotels?city=Ha Noi&option=cheapestPrice&min=100&max=300
+    if (city) {
+      hotels = await Hotel.find({ city: { $regex: city, $options: 'i' } })
+        .where(option)
+        .gte(min || 1)
+        .lte(max || 900);
+    } else hotels = await Hotel.find();
 
-    const hotels = await Hotel.find({ city: { $regex: city, $options: 'i' } })
-      .where(option)
-      .gte(min || 1)
-      .lte(max || 900);
-
-    res.status(200).json({
-      status: 'success',
-      result: hotels.length,
-      data: [...hotels],
-    });
+    res.status(200).json([...hotels]);
   } catch (err) {
     next(err);
   }
@@ -77,11 +71,7 @@ exports.sortBy = async (req, res, next) => {
 
   try {
     const hotels = await Hotel.find().sort(sortBy).limit(limit);
-    res.status(200).json({
-      status: 'success',
-      result: hotels.length,
-      data: [...hotels],
-    });
+    res.status(200).json([...hotels]);
   } catch (err) {
     next(err);
   }
@@ -91,15 +81,11 @@ exports.countByCity = async (req, res, next) => {
     const haNoiCount = await Hotel.find({ city: 'Ha Noi' }).count();
     const daNangCount = await Hotel.countDocuments({ city: 'Da Nang' });
     const hcmCount = await Hotel.countDocuments({ city: 'Ho Chi Minh' });
-    res.status(200).json({
-      status: 'success',
-      result: 3,
-      data: [
-        { city: 'Ha Noi', count: haNoiCount },
-        { city: 'Ho Chi Minh', count: hcmCount },
-        { city: 'Da Nang', count: daNangCount },
-      ],
-    });
+    res.status(200).json([
+      { city: 'Ha Noi', count: haNoiCount },
+      { city: 'Ho Chi Minh', count: hcmCount },
+      { city: 'Da Nang', count: daNangCount },
+    ]);
   } catch (err) {
     next(err);
   }
@@ -113,17 +99,13 @@ exports.countByType = async (req, res, next) => {
     const villaCount = await Hotel.countDocuments({ type: 'villa' });
     const cabinCount = await Hotel.countDocuments({ type: 'cabin' });
 
-    res.status(200).json({
-      status: 'success',
-      result: 5,
-      data: [
-        { type: 'hotel', count: hotelCount },
-        { type: 'apartments', count: apartmentCount },
-        { type: 'resorts', count: resortCount },
-        { type: 'villas', count: villaCount },
-        { type: 'cabins', count: cabinCount },
-      ],
-    });
+    res.status(200).json([
+      { type: 'hotel', count: hotelCount },
+      { type: 'apartments', count: apartmentCount },
+      { type: 'resorts', count: resortCount },
+      { type: 'villas', count: villaCount },
+      { type: 'cabins', count: cabinCount },
+    ]);
   } catch (err) {
     next(err);
   }
@@ -137,19 +119,7 @@ exports.getHotelRooms = async (req, res, next) => {
       hotel.rooms.map((room) => Room.findById(room))
     );
 
-    res.status(200).json({
-      status: 'success',
-      result: list.length,
-      data: [...list],
-    });
+    res.status(200).json([...list]);
   } catch (error) {}
 };
 
-exports.f= async (req, res, next) => {
-      
-  try {
-    
-  } catch (error) {
-    
-  }
-};

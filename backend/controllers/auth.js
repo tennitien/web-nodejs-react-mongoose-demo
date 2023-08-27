@@ -7,23 +7,30 @@ const createError = require('http-errors');
 
 exports.register = async (req, res, next) => {
   try {
+    const body = req.body;
+    const { password, ...otherBody } = body;
     const salt = bcrypt.genSaltSync(10);
-    const hash = bcrypt.hashSync(req.body.password, salt);
+    const hash = bcrypt.hashSync(password, salt);
+
+    // const newUser = new User({
+    //   username: req.body.username,
+    //   fullName: req.body.fullName,
+    //   email: req.body.email,
+    //   phone: req.body.phone,
+    //   password: hash,
+    //   isAdmin: req.body.isAdmin,
+    // });
 
     const newUser = new User({
-      username: req.body.username,
-      fullName: req.body.fullName,
-      email: req.body.email,
-      phone: req.body.phone,
+      ...otherBody,
       password: hash,
-      isAdmin: req.body.isAdmin,
     });
 
     await newUser.save();
     // res.setHeader('Set-cookie', 'isLogin=true; Max-Age=10 ');
     // res.setHeader('Set-cookie', 'isLogin=true');
     // res.status(200).send('Add new user');
-    res.send('Auth');
+    res.send('Register user');
   } catch (error) {
     next(error);
   }
@@ -57,7 +64,7 @@ exports.postLogin = async (req, res, next) => {
         httpOnly: true,
       })
       .status(200)
-      .json( {...otherDetails, isAdmin });
+      .json({ details: { ...otherDetails }, isAdmin });
   } catch (err) {
     next(err);
   }

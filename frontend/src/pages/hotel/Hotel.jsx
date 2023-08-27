@@ -30,8 +30,8 @@ const Hotel = () => {
 
   const { data, loading, error } = useFetch(hotelsApi.getById(hotelId));
   const { destination, dates, options, diffDay } = useContext(SearchContext);
-  const { username } = useContext(AuthContext);
-
+  const { user } = useContext(AuthContext);
+  console.log('user :>> ', user);
   const handleOpen = i => {
     setSlideNumber(i);
     setOpen(true);
@@ -49,110 +49,108 @@ const Hotel = () => {
     setSlideNumber(newSlideNumber);
   };
   const handleReserve = () => {
-    if (username) {
+    if (user.username) {
       setOpenReserve(prev => !prev);
     } else navigate('/login');
   };
 
-  let name = data.name;
-  let title = data.title;
-  let address = data.address;
-  let distance = data.distance;
-  let description = data.desc;
-  let price = data.cheapestPrice;
-  let photos = data.photos;
+  let name = data?.name || '';
+  let title = data?.title || '';
+  let address = data?.address || '';
+  let distance = data?.distance || '';
+  let description = data?.desc || '';
+  let price = data?.cheapestPrice || '';
+  let photos = data?.photos || '';
+  console.log(data);
 
   let score = 9.8;
   return (
     <>
-      <Navbar />
+      {/* <Navbar /> */}
       <Header type='list' />
 
       {loading ? (
         'loadnign'
       ) : (
-        <>
-          <p>Test</p>
-          <Test hotelId={hotelId} />
-        </>
-        // <div className='hotelContainer'>
-        //   {open && (
-        //     <div className='slider'>
-        //       <FontAwesomeIcon
-        //         icon={faCircleXmark}
-        //         className='close'
-        //         onClick={() => setOpen(false)}
-        //       />
-        //       <FontAwesomeIcon
-        //         icon={faCircleArrowLeft}
-        //         className='arrow'
-        //         onClick={() => handleMove('l')}
-        //       />
-        //       <div className='sliderWrapper'>
-        //         <img
-        //           src={photos[slideNumber].src}
-        //           alt=''
-        //           className='sliderImg'
-        //         />
-        //       </div>
-        //       <FontAwesomeIcon
-        //         icon={faCircleArrowRight}
-        //         className='arrow'
-        //         onClick={() => handleMove('r')}
-        //       />
-        //     </div>
-        //   )}
-        //   <div className='hotelWrapper'>
-        //     <button className='bookNow' onClick={handleReserve}>
-        //       Reserve or Book Now!
-        //     </button>
-        //     <h1 className='hotelTitle'>{name}</h1>
-        //     <div className='hotelAddress'>
-        //       <FontAwesomeIcon icon={faLocationDot} />
-        //       <span>{address}</span>
-        //     </div>
-        //     <span className='hotelDistance'>
-        //       Excellent location – {distance}m from center
-        //     </span>
-        //     <span className='hotelPriceHighlight'>
-        //       Book a stay over ${price} at this property and get a free airport
-        //       taxi
-        //     </span>
-        //     <div className='hotelImages'>
-        //       {photos?.map((photo, i) => (
-        //         <div className='hotelImgWrapper' key={i}>
-        //           <img
-        //             onClick={() => handleOpen(i)}
-        //             src={photo}
-        //             alt=''
-        //             className='hotelImg'
-        //           />
-        //         </div>
-        //       ))}
-        //     </div>
-        //     <div className='hotelDetails'>
-        //       <div className='hotelDetailsTexts'>
-        //         <h1 className='hotelTitle'>{title}</h1>
-        //         <p className='hotelDesc'>{description}</p>
-        //       </div>
-        //       <div className='hotelDetailsPrice'>
-        //         <h1>Perfect for a {diffDay}-night stay!</h1>
-        //         <span>
-        //           Located in the real heart of Krakow, this property has an
-        //           excellent location score of {score}!
-        //         </span>
-        //         <h2>
-        //           <b>${price * diffDay * options.room}</b> ({diffDay} nights)
-        //         </h2>
-        //         <button onClick={handleReserve}>Reserve or Book Now!</button>
-        //       </div>
-        //     </div>
-        //     {openReserve && <Reserve hotelId={hotelId} priceDefault={price}/>}
-        //   </div>
+        <div className='hotelContainer'>
+          {open && (
+            <div className='slider'>
+              <FontAwesomeIcon
+                icon={faCircleXmark}
+                className='close'
+                onClick={() => setOpen(false)}
+              />
+              <FontAwesomeIcon
+                icon={faCircleArrowLeft}
+                className='arrow'
+                onClick={() => handleMove('l')}
+              />
+              <div className='sliderWrapper'>
+                <img
+                  src={photos[slideNumber].src}
+                  alt=''
+                  className='sliderImg'
+                />
+              </div>
+              <FontAwesomeIcon
+                icon={faCircleArrowRight}
+                className='arrow'
+                onClick={() => handleMove('r')}
+              />
+            </div>
+          )}
+          <div className='hotelWrapper'>
+            <button className='bookNow' onClick={handleReserve}>
+              Reserve or Book Now!
+            </button>
+            <h1 className='hotelTitle'>{name}</h1>
+            <div className='hotelAddress'>
+              <FontAwesomeIcon icon={faLocationDot} />
+              <span>{address}</span>
+            </div>
+            <span className='hotelDistance'>
+              Excellent location – {distance}m from center
+            </span>
+            <span className='hotelPriceHighlight'>
+              Book a stay over ${price} at this property and get a free airport
+              taxi
+            </span>
+            <div className='hotelImages'>
+              {photos &&
+                photos.map((photo, i) => (
+                  <div className='hotelImgWrapper' key={i}>
+                    <img
+                      onClick={() => handleOpen(i)}
+                      src={photo}
+                      alt=''
+                      className='hotelImg'
+                    />
+                  </div>
+                ))}
+            </div>
+            <div className='hotelDetails'>
+              <div className='hotelDetailsTexts'>
+                <h1 className='hotelTitle'>{title}</h1>
+                <p className='hotelDesc'>{description}</p>
+              </div>
+              <div className='hotelDetailsPrice'>
+                <h1>Perfect for a {diffDay}-night stay!</h1>
+                <span>
+                  Located in the real heart of Krakow, this property has an
+                  excellent location score of {score}!
+                </span>
+                <h2>
+                  <b>${price * diffDay * options.room}</b> ({diffDay} nights)
+                </h2>
+                <button onClick={handleReserve}>Reserve or Book Now!</button>
+              </div>
+            </div>
+            {openReserve && <Reserve hotelId={hotelId} priceDefault={price} />}
+          </div>
 
-        //   <MailList />
-        //   <Footer />
-        // </div>
+          <MailList />
+          <Footer />
+        </div>
       )}
     </>
   );

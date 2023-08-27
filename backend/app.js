@@ -13,6 +13,7 @@ const authRoute = require('./routes/auth');
 const hotelsRoute = require('./routes/hotels');
 const roomsRoute = require('./routes/rooms');
 const usersRoute = require('./routes/users');
+const transactionRoute = require('./routes/transaction');
 
 const connect = async () => {
   try {
@@ -46,6 +47,7 @@ app.use('/api/auth', authRoute);
 app.use('/api/users', usersRoute);
 app.use('/api/hotels', hotelsRoute);
 app.use('/api/rooms', roomsRoute);
+app.use('/api/transactions', transactionRoute);
 
 app.use((err, req, res, next) => {
   const errorStatus = err.status || 500;

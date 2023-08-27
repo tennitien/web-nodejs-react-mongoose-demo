@@ -1,9 +1,7 @@
-let list = {
-  ans: { price: 2300, value: true },
-  ds: { price: 9023423400, value: false },
-  adsdns: { price: 1233200, value: true },
-};
+let list = [
+  { roomid: 'djksk', roomNumbers: [1, 2, 3] },
+  { roomid: 'djksk', roomNumbers: [6, 7, 5] },
+];
 
-for (const key in list) {
-  if (list[key].value === true) console.log(list[key].price);
-}
+let ds = list.map((item) => item.roomNumbers.map((item) => item));
+console.log(ds.toString());

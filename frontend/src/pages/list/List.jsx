@@ -32,11 +32,9 @@ const List = () => {
       return { ...prev, [name]: value };
     });
   };
-  // let url = `/hotels?city=${destination}&option=cheapestPrice&min=${minPrice}&max=${maxPrice}`;
   const { data, loading, error } = useFetch(
     hotelsApi.search(destination, minPrice, maxPrice)
   );
-
   const handleSearch = () => {
     dispatch({
       type: SearchActions.add,
@@ -51,7 +49,7 @@ const List = () => {
   }, [destination, dates, options]);
   return (
     <>
-      <Navbar />
+      {/* <Navbar /> */}
       <Header type='list' />
       <div className='listContainer'>
         <div className='listWrapper'>

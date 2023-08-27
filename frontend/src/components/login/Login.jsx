@@ -22,7 +22,7 @@ function Login() {
     // "proxy": "http://localhost:5000/api"
     try {
       const result = await axios.post('/auth/login', credential);
-      dispatch({ type: AuthActions.login_success, payload: result.data });
+      dispatch({ type: AuthActions.login_success, payload: result.data.details });
       navigate('/')
     } catch (error) {
       console.log('error :>> ', error);

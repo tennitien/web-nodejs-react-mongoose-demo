@@ -8,7 +8,17 @@ export const hotelsApi = {
   getById: hotelId => {
     return `/hotels/detail/${hotelId}`;
   },
-  getRooms: hotelid=>{
-    return `/hotels/room/${hotelid}`
-  }
+  getRooms: hotelid => {
+    return `/hotels/room/${hotelid}`;
+  },
+};
+
+export const authApi = {
+  postLogin: '/auth/login',
+};
+
+export const transactionApi = {
+  getById: userId => {
+    return `/transactions/user/${userId}`;
+  },
 };

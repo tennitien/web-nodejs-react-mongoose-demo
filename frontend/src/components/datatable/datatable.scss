@@ -1,0 +1,43 @@
+.table {
+  border-collapse: collapse;
+  td,
+  th {
+    border: 1px solid #ddd;
+    padding:10px ;
+    text-align: left;
+   
+  }
+}
+.tableHead {
+  background-color: #31a5c1;
+
+  th {
+    color: #fff;
+  }
+  tr{
+    color:red;
+  }
+}
+.greyBg{
+  background-color: #f2f2f2;
+}
+.hotelName{
+  min-width: 300px;
+}
+.payment{
+  text-transform:capitalize;
+}
+.status {
+  padding: 4px;
+  border-radius: 4px;
+  color: #179117d8;
+}
+.booked {
+  background-color: #f69785;
+}
+.checkin{
+  background-color: #39D139;
+}
+.checkout{
+  background-color: #D3D0F2;
+}

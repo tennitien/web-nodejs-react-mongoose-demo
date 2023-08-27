@@ -9,8 +9,9 @@ import * as yup from 'yup';
 import useFetch from '../../hooks/useFetch';
 import { hotelsApi } from '../../api/apiConfig';
 import { SearchContext } from '../../context/SearchContext';
-import { useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
+import axios from 'axios';
 
 // validate Form
 const phoneRegExp =
@@ -31,9 +32,11 @@ const schema = yup.object({
 // validate Form --end
 
 function Reserve({ hotelId, priceDefault }) {
+  const navigate = useNavigate();
   const { data, loading, error } = useFetch(hotelsApi.getRooms(hotelId));
+  console.log('data :>> ', data);
   const { dates } = useContext(SearchContext);
-  const { username } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   const [date, setDate] = useState([
     {
       startDate: new Date(dates[0].startDate),
@@ -46,9 +49,9 @@ function Reserve({ hotelId, priceDefault }) {
   const [totalBill, setTotalBill] = useState(0);
 
   let defaultValues = {
-    name: username.fullName,
-    email: username.email,
-    phone: username.phone,
+    name: user.fullName,
+    email: user.email,
+    phone: user.phone,
     card: '',
   };
   const form = useForm({ defaultValues, resolver: yupResolver(schema) });
@@ -58,7 +61,7 @@ function Reserve({ hotelId, priceDefault }) {
     formState: { errors },
   } = form;
 
-  const onSubmit = input => {
+  const onSubmit = async input => {
     const { name, email, phone, card, payment, ...rooms } = input;
     setDataForm({
       name,
@@ -76,14 +79,37 @@ function Reserve({ hotelId, priceDefault }) {
     });
     console.log('rooms :>> ', rooms);
     let sum = 0;
+    let roomArray = [];
     for (const key in rooms) {
-      if (rooms[key].value) {
-        let quantity = rooms[key].value.length;
+      if (rooms[key].roomNumbers) {
+        roomArray.push({
+          roomId: key,
+          roomNumbers: rooms[key].roomNumbers,
+        });
+        let quantity = rooms[key].roomNumbers.length;
         let price = rooms[key].price;
         sum += price * quantity;
       }
     }
-    setTotalBill(sum)
+    setTotalBill(sum);
+
+    let transaction = {
+      userId: user._id,
+      hotelId: hotelId,
+      rooms: roomArray,
+      dateStart: date[0].startDate,
+      dateEnd: date[0].endDate,
+      price: totalBill,
+      payment: payment,
+      status: 'Booked',
+    };
+    console.log('transaction :>> ', transaction);
+    try {
+      await axios.post('/transactions', transaction);
+      navigate('/transaction');
+    } catch (error) {
+      console.log('error :>> ', error);
+    }
   };
   return (
     <>
@@ -159,7 +185,7 @@ function Reserve({ hotelId, priceDefault }) {
                                 <input
                                   type='checkbox'
                                   value={roomNumber}
-                                  {...register(`${room._id}.value`)}
+                                  {...register(`${room._id}.roomNumbers`)}
                                 />
                                 <input
                                   type='text'
@@ -175,20 +201,21 @@ function Reserve({ hotelId, priceDefault }) {
                   })}
               </div>
             </div>
-            
-            <div className='bill'>
-            <h2 className='bill-title'>Total Bill: ${totalBill* dataForm.diffDay || priceDefault }</h2>
-              <select {...register('payment')} className='select'>
-                <option value="hide">Select Payment Method</option>
-                <option value='cash'>cash</option>
-                <option value='credit'>credit</option>
-                <option value='other'>other</option>
-              </select>
-              
-              <div className="formAction">
-              <input type='submit' value='Reserve Now'/>
-              </div>
 
+            <div className='bill'>
+              <h2 className='bill-title'>
+                Total Bill: ${totalBill * dataForm.diffDay || priceDefault}
+              </h2>
+              <select {...register('payment')} className='select'>
+                <option value='hide'>Select Payment Method</option>
+                <option value='Credit Cart'>Credit Cart</option>
+                <option value='Cash'>Cash</option>
+                {/* <option value='Other'>Other</option> */}
+              </select>
+
+              <div className='formAction'>
+                <input type='submit' value='Reserve Now' />
+              </div>
             </div>
           </div>
         </form>
