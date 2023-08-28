@@ -86,7 +86,7 @@ export const hotelInputs = [
   {
     id: 'distance',
     label: 'Distance from City Center',
-    type: 'text',
+    type: 'number',
     placeholder: '500',
   },
   {
@@ -104,9 +104,10 @@ export const hotelInputs = [
   {
     id: 'cheapestPrice',
     label: 'Price',
-    type: 'text',
+    type: 'number',
     placeholder: '100',
   },
+ 
 ];
 
 export const roomInputs = [

@@ -17,7 +17,7 @@ import { useContext } from 'react';
 
 const Sidebar = () => {
   const { dispatch } = useContext(DarkModeContext);
-  const nameWeb='Admin Page';
+  const nameWeb = 'Admin Page';
   return (
     <div className='sidebar'>
       <div className='top'>
@@ -57,14 +57,18 @@ const Sidebar = () => {
             <span>Transactions</span>
           </li>
           <p className='title'>USEFUL</p>
-          <li>
-            <InsertChartIcon className='icon' />
-            <span>Stats</span>
-          </li>
-          <li>
-            <NotificationsNoneIcon className='icon' />
-            <span>Notifications</span>
-          </li>
+          <Link to='/hotels/new' style={{ textDecoration: 'none' }}>
+            <li>
+              <StoreIcon className='icon' />
+              <span>New Hotel</span>
+            </li>
+          </Link>
+          <Link to='/rooms/new' style={{ textDecoration: 'none' }}>
+            <li>
+              <CreditCardIcon className='icon' />
+              <span>New Room</span>
+            </li>
+          </Link>
           <p className='title'>SERVICE</p>
           <li>
             <SettingsSystemDaydreamOutlinedIcon className='icon' />

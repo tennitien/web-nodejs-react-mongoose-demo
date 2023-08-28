@@ -1,5 +1,6 @@
 const Transaction = require('../models/Transaction');
 const Hotel = require('../models/Hotel');
+const User = require('../models/User');
 const createError = require('http-errors');
 
 exports.createTransaction = async (req, res, next) => {
@@ -34,7 +35,39 @@ exports.getTransactionByUser = async (req, res, next) => {
     next(createError(404, 'Transaction not found'));
   }
 };
+exports.getTransactions = async (req, res, next) => {
+  // ,userId,hotelId->name, room:number, date :2cai, price, payment,status
+  let { limit } = req.query;
 
+  try {
+    const transactions = await Transaction.find()
+      .sort({ dateStart: -1 })
+      .limit(limit ? limit : 0);
+    let transformTrans = [];
+    for (const trans of transactions) {
+      const { userId, hotelId, rooms, dateStart, dateEnd, ...other } =
+        trans._doc;
+      const user = await User.findById(userId);
+      const hotel = await Hotel.findById(hotelId);
+      const username = user.username;
+      const hotelName = hotel.name;
+      const roomNumbers = rooms
+        .map((room) => room.roomNumbers.map((r) => r))
+        .toString();
+      const date = `${new Date(dateStart).toLocaleDateString(
+        'en-GB'
+      )} - ${new Date(dateEnd).toLocaleDateString('en-GB')}`;
+      transformTrans.push({
+        ...other,
+        username,
+        hotelName,
+        roomNumbers,
+        date,
+      });
+    }
+    res.status(200).json(transformTrans);
+  } catch (error) {}
+};
 exports.getSummary = async (req, res, next) => {
   try {
     const users = await Transaction.distinct('userId');

@@ -5,6 +5,7 @@ const verifyController = require('../controllers/verifyToken');
 const router = express.Router();
 
 router.post('/', transactionController.createTransaction);
+router.get('/', transactionController.getTransactions);
 router.get('/user/:userId', transactionController.getTransactionByUser);
 router.get(
   '/summary',

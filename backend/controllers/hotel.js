@@ -1,5 +1,7 @@
+const createHttpError = require('http-errors');
 const Hotel = require('../models/Hotel');
 const Room = require('../models/Room');
+const Transaction = require('../models/Transaction');
 // admin them>xoa>xem Hotel & Room **Update
 
 exports.createHotel = async (req, res, next) => {
@@ -29,8 +31,21 @@ exports.updatedHotel = async (req, res, next) => {
 };
 exports.deleteHotel = async (req, res, next) => {
   try {
-    await Hotel.findByIdAndDelete(req.params.id);
-    res.status(200).json('Hotel has been deleted.');
+    let hotel;
+    try {
+      hotel = await Transaction.findOne({ hotelId: req.params.id });
+    } catch (error) {
+      next(createHttpError(404, 'Transaction not found with hotel'));
+    }
+
+    if (hotel)
+      return next(
+        createHttpError(404, 'The hotel with transactions cannot be deleted.')
+      );
+    else {
+      await Hotel.findByIdAndDelete(req.params.id);
+      res.status(200).json('Hotel has been deleted.');
+    }
   } catch (err) {
     next(err);
   }
@@ -66,7 +81,7 @@ exports.getHotels = async (req, res, next) => {
 exports.sortBy = async (req, res, next) => {
   // asc : tang dang, giam dan: des
   // api/hotels/sortBy?sort=des&value=cheapestPrice&limit=2
-  const { sort, limit, value } = req.query;
+  const { sort, limit, value } = req.params;
   let sortBy = sort === 'asc' ? value : `-${value}`;
 
   try {
@@ -122,4 +137,3 @@ exports.getHotelRooms = async (req, res, next) => {
     res.status(200).json([...list]);
   } catch (error) {}
 };
-

@@ -10,13 +10,19 @@ import {
   Navigate,
   createBrowserRouter,
 } from 'react-router-dom';
-import { hotelInputs, productInputs, userInputs } from './formSource';
+import { hotelInputs, productInputs, roomInputs, userInputs } from './formSource';
 import './style/dark.scss';
 import { useContext } from 'react';
 import { DarkModeContext } from './context/darkModeContext';
 import { AuthContext } from './context/AuthContext';
-import { hotelColumns, userColumns } from './datatablesource';
+import {
+  hotelColumns,
+  roomColumns,
+  transactionLimitColumns,
+  userColumns,
+} from './datatablesource';
 import NewHotel from './pages/newHotel/NewHotel';
+import NewRoom from './pages/newRoom/NewRoom';
 
 function App() {
   const { darkMode } = useContext(DarkModeContext);
@@ -28,31 +34,97 @@ function App() {
     return children;
   };
 
-  // const router = createBrowserRouter([
-  //   {
-  //     path: '/',
-  //     children: [
-  //       {
-  //         index: true,
-  //         element: (
-  //           <ProtectedRoute>
-  //             <Home />
-  //           </ProtectedRoute>
-  //         ),
-  //       },
-  //       { path: 'login', element: <Login /> },
-  //       {
-  //         path: 'users',
-  //         element: (
-  //           <ProtectedRoute>
-  //             <List columns={userColumns} />
-  //           </ProtectedRoute>
-  //         ),
-  //       },
-  //       { path: 'login', element: <Login /> },
-  //     ],
-  //   },
-  // ]);
+  const router = createBrowserRouter([
+    {
+      path: '/',
+      children: [
+        {
+          index: true,
+          element: (
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
+          ),
+        },
+        { path: 'login', element: <Login /> },
+        {
+          path: 'users',
+          children: [
+            {
+              index: true,
+              element: (
+                <ProtectedRoute>
+                  <List columns={userColumns} />
+                </ProtectedRoute>
+              ),
+            },
+            {
+              path: ':userId',
+              element: (
+                <ProtectedRoute>
+                  <Single />
+                </ProtectedRoute>
+              ),
+            },
+            {
+              path: 'new',
+              element: (
+                <ProtectedRoute>
+                  <NewUser inputs={userInputs} title='Add New User' />
+                </ProtectedRoute>
+              ),
+            },
+          ],
+        },
+
+        {
+          path: 'hotels',
+          children: [
+            {
+              index: true,
+              element: (
+                <ProtectedRoute>
+                  <List columns={hotelColumns} />
+                </ProtectedRoute>
+              ),
+            },
+            // {path:':hotelId'},
+            {
+              path: 'new',
+              element: (
+                <ProtectedRoute>
+                  <NewHotel inputs={hotelInputs} title='Add New Hotel' />
+                </ProtectedRoute>
+              ),
+            },
+          ],
+        },
+        {
+          path: 'rooms',
+          children: [
+            {
+              index: true,
+              element: (
+                <ProtectedRoute>
+                  {/* <List columns={roomColumns} /> */}
+                </ProtectedRoute>
+              ),
+            },
+            // {path:':hotelId'},
+            {
+              path: 'new',
+              element: (
+                <ProtectedRoute>
+                  <NewHotel inputs={hotelInputs} title='Add New Hotel' />
+                </ProtectedRoute>
+              ),
+            },
+          ],
+        },
+      ],
+    },
+  ]);
+
   return (
     <div className={darkMode ? 'app dark' : 'app'}>
       <BrowserRouter>
@@ -63,7 +135,7 @@ function App() {
               index
               element={
                 <ProtectedRoute>
-                  <Home />
+                  <Home columns={transactionLimitColumns} action={false} />
                 </ProtectedRoute>
               }
             />
@@ -124,7 +196,7 @@ function App() {
                 index
                 element={
                   <ProtectedRoute>
-                    {/* <List columns={roomColumns} /> */}
+                    <List columns={roomColumns} />
                   </ProtectedRoute>
                 }
               />
@@ -138,7 +210,11 @@ function App() {
               />
               <Route
                 path='new'
-                element={<ProtectedRoute>{/* <NewRoom  /> */}</ProtectedRoute>}
+                element={
+                  <ProtectedRoute>
+                    <NewRoom inputs={roomInputs} title='Add New Room' />
+                  </ProtectedRoute>
+                }
               />
             </Route>
           </Route>

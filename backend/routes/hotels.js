@@ -9,6 +9,7 @@ router.post('/', verifyAdmin, hotelController.createHotel);
 router.put('/:id', verifyAdmin, hotelController.updatedHotel);
 // router.put("/:id",  hotelController.updatedHotel);
 router.delete('/:id', verifyAdmin, hotelController.deleteHotel);
+// router.get('/:id', verifyAdmin, hotelController.deleteHotel);
 // router.get("/find/:id", getHotel);
 
 router.get('/', hotelController.getHotels);
