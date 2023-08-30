@@ -12,24 +12,12 @@ exports.register = async (req, res, next) => {
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(password, salt);
 
-    // const newUser = new User({
-    //   username: req.body.username,
-    //   fullName: req.body.fullName,
-    //   email: req.body.email,
-    //   phone: req.body.phone,
-    //   password: hash,
-    //   isAdmin: req.body.isAdmin,
-    // });
-
     const newUser = new User({
       ...otherBody,
       password: hash,
     });
 
     await newUser.save();
-    // res.setHeader('Set-cookie', 'isLogin=true; Max-Age=10 ');
-    // res.setHeader('Set-cookie', 'isLogin=true');
-    // res.status(200).send('Add new user');
     res.send('Register user');
   } catch (error) {
     next(error);
@@ -39,8 +27,6 @@ exports.register = async (req, res, next) => {
 exports.getLogin = async (req, res, next) => {};
 
 exports.postLogin = async (req, res, next) => {
-  // req.session.isLoggedIn = true;
-
   try {
     const user = await User.findOne({ username: req.body.username });
     if (!user) return next(createError(404, 'User not found'));

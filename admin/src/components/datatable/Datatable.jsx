@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import useFetch from '../../hooks/useFetch';
 import { userApi } from '../../api/apiConfig';
 import axios from 'axios';
+import Loading from '../loading/Loading';
 
 const Datatable = ({ columns, action = true, pageSize = 9 }) => {
   const location = useLocation();
@@ -41,8 +42,11 @@ const Datatable = ({ columns, action = true, pageSize = 9 }) => {
       renderCell: params => {
         return (
           <div className='cellAction'>
-            <Link to='/users/test' style={{ textDecoration: 'none' }}>
-              <div className='viewButton'>View</div>
+            <Link
+              to={`/${path}/${params.row._id}`}
+              style={{ textDecoration: 'none' }}
+            >
+              <div className='viewButton'>Edit</div>
             </Link>
             <div
               className='deleteButton'
@@ -58,7 +62,7 @@ const Datatable = ({ columns, action = true, pageSize = 9 }) => {
   return (
     <>
       {loading ? (
-        'loading...'
+        <Loading />
       ) : (
         <div className='datatable'>
           {action && (
@@ -73,7 +77,6 @@ const Datatable = ({ columns, action = true, pageSize = 9 }) => {
             <DataGrid
               className='datagrid'
               rows={list}
-              // columns={columns}
               columns={action ? columns.concat(actionColumn) : columns}
               pageSize={pageSize}
               rowsPerPageOptions={[9]}

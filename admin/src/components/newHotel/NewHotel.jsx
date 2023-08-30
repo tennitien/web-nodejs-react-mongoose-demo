@@ -1,6 +1,6 @@
 import './newHotel.scss';
-import Sidebar from '../../components/sidebar/Sidebar';
-import Navbar from '../../components/navbar/Navbar';
+import Sidebar from '../sidebar/Sidebar';
+import Navbar from '../navbar/Navbar';
 import { useState } from 'react';
 import axios from 'axios';
 import useFetch from '../../hooks/useFetch';

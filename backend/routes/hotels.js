@@ -13,6 +13,7 @@ router.delete('/:id', verifyAdmin, hotelController.deleteHotel);
 // router.get("/find/:id", getHotel);
 
 router.get('/', hotelController.getHotels);
+router.get('/search', hotelController.searchHotel);
 router.get('/detail/:id', hotelController.getHotelById);
 router.get('/countByCity', hotelController.countByCity);
 router.get('/countByType', hotelController.countByType);

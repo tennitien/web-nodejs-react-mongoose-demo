@@ -2,7 +2,6 @@
 
 export const authApi = {
   postLogin: '/auth/login',
-  // register: 'auth/register',
   newUser: '/auth/register',
 };
 export const userApi = {
@@ -10,4 +9,19 @@ export const userApi = {
 };
 export const transactionApi = {
   getSummary: '/transactions/summary',
+};
+export const hotelApi = {
+  getHotels: '/hotels',
+  getById:hotelId=>{
+    return `/hotels/detail/${hotelId}`
+  },
+  updateById:hotelId=>{
+    return `/hotels/${hotelId}`
+  }
+};
+
+export const roomApi = {
+  createRoom: hotelId => {
+    return `/rooms/${hotelId}`;
+  },
 };

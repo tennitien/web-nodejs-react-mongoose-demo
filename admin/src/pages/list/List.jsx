@@ -5,9 +5,9 @@ import Datatable from "../../components/datatable/Datatable"
 
 const List = ({columns}) => {
   return (
-    <div className="list">
+    <div className="page" id="list">
       <Sidebar/>
-      <div className="listContainer">
+      <div className="container">
         <Navbar/>
         <Datatable columns={columns}/>
       </div>

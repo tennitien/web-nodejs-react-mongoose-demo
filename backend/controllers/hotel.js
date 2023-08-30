@@ -54,17 +54,31 @@ exports.deleteHotel = async (req, res, next) => {
 exports.getHotelById = async (req, res, next) => {
   try {
     const hotel = await Hotel.findById(req.params.id);
-    res.status(200).json(hotel);
+    const { rooms, ...other } = hotel._doc;
+    const list = await Promise.all(
+      hotel.rooms.map((room) => Room.findById(room).select('title'))
+    );
+
+    const transformHotel = { ...other, rooms: list };
+    res.status(200).json(transformHotel);
   } catch (err) {
     next(err);
   }
 };
 
 exports.getHotels = async (req, res, next) => {
+  try {
+    const hotels = await Hotel.find();
+    res.status(200).json([...hotels]);
+  } catch (err) {
+    next(err);
+  }
+};
+exports.searchHotel = async (req, res, next) => {
   const { city, option, min, max } = req.query;
   let hotels;
   try {
-    //  api/hotels?city=Ha Noi&option=cheapestPrice&min=100&max=300
+    //  api/hotels/search?city=Ha Noi&option=cheapestPrice&min=100&max=300
     if (city) {
       hotels = await Hotel.find({ city: { $regex: city, $options: 'i' } })
         .where(option)
@@ -77,7 +91,6 @@ exports.getHotels = async (req, res, next) => {
     next(err);
   }
 };
-
 exports.sortBy = async (req, res, next) => {
   // asc : tang dang, giam dan: des
   // api/hotels/sortBy?sort=des&value=cheapestPrice&limit=2

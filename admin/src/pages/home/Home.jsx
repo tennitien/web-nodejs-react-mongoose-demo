@@ -6,18 +6,21 @@ import Featured from '../../components/featured/Featured';
 import Chart from '../../components/chart/Chart';
 import Table from '../../components/table/Table';
 import Datatable from '../../components/datatable/Datatable';
+import useFetch from '../../hooks/useFetch';
+import { transactionApi } from '../../api/apiConfig';
+import { transactionColumns } from '../../datatablesource';
+import Loading from '../../components/loading/Loading';
 
-const Home = ({ columns, action }) => {
+const Home = () => {
+  const { data, loading, error } = useFetch(transactionApi.getSummary);
+
   return (
     <div className='home'>
       <Sidebar />
       <div className='homeContainer'>
         <Navbar />
         <div className='widgets'>
-          <Widget type='user' />
-          <Widget type='order' />
-          <Widget type='earning' />
-          <Widget type='balance' />
+          {loading ? <Loading /> : <Widget data={data} />}
         </div>
         <div className='charts'>
           {/* <Featured /> */}
@@ -26,7 +29,7 @@ const Home = ({ columns, action }) => {
         <div className='listContainer'>
           <div className='listTitle'>Latest Transactions</div>
           {/* <Table /> */}
-          <Datatable columns={columns} action={action}/>
+          <Datatable columns={transactionColumns} action={false} />
         </div>
       </div>
     </div>
