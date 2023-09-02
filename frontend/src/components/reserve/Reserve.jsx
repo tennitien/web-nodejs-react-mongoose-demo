@@ -48,6 +48,7 @@ function Reserve({ hotelId, priceDefault }) {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = form;
 
@@ -66,34 +67,57 @@ function Reserve({ hotelId, priceDefault }) {
   const [postLoading, setPostLoading] = useState(false);
   const [totalBill, setTotalBill] = useState(0);
   const [roomErr, setRoomErr] = useState(null);
- 
+  let diffDay = Math.round(
+    (new Date(date[0].endDate) - new Date(date[0].startDate)) /
+      (1000 * 60 * 60 * 24) +
+      1
+  );
+  const rooms = watch('rooms');
+  let sum = 0;
+  let roomArray = [];
+  for (const key in rooms) {
+    if (rooms[key].roomNumbers?.length > 0) {
+      roomArray.push({
+        roomId: key,
+        roomNumbers: rooms[key].roomNumbers,
+      });
+      let quantity = rooms[key].roomNumbers.length;
+      let price = rooms[key].price;
+      sum += price * quantity;
+    }
+  }
+  useEffect(() => {
+    let bill = sum * diffDay;
+    setTotalBill(bill);
+  }, [sum, diffDay]);
   // // ------------------ ///
   const onSubmit = async input => {
-    const { rooms, payment,...other } = input;
+    const { payment, ...other } = input;
 
-    let sum = 0;
-    let roomArray = [];
-    for (const key in rooms) {
-      if (rooms[key].roomNumbers.length > 0) {
-        roomArray.push({
-          roomId: key,
-          roomNumbers: rooms[key].roomNumbers,
-        });
-        let quantity = rooms[key].roomNumbers.length;
-        let price = rooms[key].price;
-        sum += price * quantity;
-      }
-    }
+    // let sum = 0;
+    // let roomArray = [];
+    // for (const key in rooms) {
+    //   if (rooms[key].roomNumbers?.length > 0) {
+    //     roomArray.push({
+    //       roomId: key,
+    //       roomNumbers: rooms[key].roomNumbers,
+    //     });
+    //     let quantity = rooms[key].roomNumbers.length;
+    //     let price = rooms[key].price;
+    //     sum += price * quantity;
+    //   }
+    // }
+
+    // let diffDay = Math.round(
+    //   (new Date(date[0].endDate) - new Date(date[0].startDate)) /
+    //     (1000 * 60 * 60 * 24) +
+    //     1
+    // );
+    // let totalBill = sum * diffDay;
+    // setTotalBill(totalBill);
     if (!roomArray.length) return setRoomErr('Room is required');
-    else setRoomErr(null)
-
-    let diffDay =
-      Math.round((new Date(date[0].endDate) - new Date(date[0].startDate)) /
-        (1000 * 60 * 60 * 24) +
-      1);
-    let totalBill = sum * diffDay;
-    setTotalBill(totalBill);
-
+    else setRoomErr(null);
+    
     let transaction = {
       userId: user._id,
       hotelId: hotelId,
@@ -101,19 +125,18 @@ function Reserve({ hotelId, priceDefault }) {
       dateStart: date[0].startDate,
       dateEnd: date[0].endDate,
       price: totalBill,
-      payment:payment,
+      payment: payment,
       status: 'Booked',
     };
     // console.log('transaction :>> ', transaction);
-    setPostLoading(true)
-    // try {
-    //   await axios.post('/transactions', transaction);
-    //   navigate(`/transaction/${user._id}`);
-    // } catch (error) {
-    //   console.log('error :>> ', error);
-    // }
-    setPostLoading(false)
-
+    setPostLoading(true);
+    try {
+      await axios.post('/transactions', transaction);
+      navigate(`/transaction/${user._id}`);
+    } catch (error) {
+      console.log('error :>> ', error);
+    }
+    setPostLoading(false);
   };
   return (
     <>
@@ -232,6 +255,7 @@ function Reserve({ hotelId, priceDefault }) {
               <p className='error'>{errors.payment?.message}</p>
             </div>
             <div className='formAction'>
+              {/* {!calcBill && <input type="submit" value={'Total Bill'}/>} */}
               <input
                 type='submit'
                 disabled={postLoading}

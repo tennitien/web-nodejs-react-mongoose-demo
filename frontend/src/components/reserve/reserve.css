@@ -71,3 +71,6 @@
   font-style: italic;
   font-size: 13px;
 }
+.reserve .formAction{
+  align-items: end;
+}
