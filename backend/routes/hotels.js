@@ -7,11 +7,9 @@ const router = express.Router();
 
 router.post('/', verifyAdmin, hotelController.createHotel);
 router.put('/:id', verifyAdmin, hotelController.updatedHotel);
-// router.put("/:id",  hotelController.updatedHotel);
 router.delete('/:id', verifyAdmin, hotelController.deleteHotel);
-// router.get('/:id', verifyAdmin, hotelController.deleteHotel);
-// router.get("/find/:id", getHotel);
 
+// user
 router.get('/', hotelController.getHotels);
 router.get('/search', hotelController.searchHotel);
 router.get('/detail/:id', hotelController.getHotelById);

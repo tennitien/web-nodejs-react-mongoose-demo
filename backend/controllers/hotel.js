@@ -94,9 +94,9 @@ exports.searchHotel = async (req, res, next) => {
 exports.sortBy = async (req, res, next) => {
   // asc : tang dang, giam dan: des
   // api/hotels/sortBy?sort=des&value=cheapestPrice&limit=2
-  const { sort, limit, value } = req.params;
+  const { sort, limit, value } = req.query;
   let sortBy = sort === 'asc' ? value : `-${value}`;
-
+  console.log('limit :>> ', req.query);
   try {
     const hotels = await Hotel.find().sort(sortBy).limit(limit);
     res.status(200).json([...hotels]);

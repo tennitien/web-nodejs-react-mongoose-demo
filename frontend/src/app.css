@@ -4,6 +4,14 @@
   align-items: center;
   margin-top: 20px;
 }
+.formContainer {
+  width: 35%;
+  margin: 2em auto;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  padding: 20px 40px;
+  border-radius: 10px;
+}
+
 .formControl {
   display: flex;
   flex-direction: column;
@@ -39,6 +47,9 @@
   background-color: #003580;
   color: #fff;
   cursor: pointer;
+}
+.formAction input[type='submit']:disabled {
+  cursor: not-allowed;
 }
 .formAction:hover input {
   background-color: #0750b7;

@@ -10,11 +10,11 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { hotelApi } from '../../api/apiConfig';
 import { useNavigate } from 'react-router-dom';
 
-export default function EditHotel({ inputs, title, data }) {
+export default function EditHotel({ inputs, title, defaultValues }) {
   const navigate = useNavigate();
   const [postLoading, setPostLoading] = useState(false);
-  const { photos, rooms, ...other } = data;
-  console.log('data :>> ', data);
+  const { photos, rooms, ...other } = defaultValues;
+  console.log('defaultValues :>> ', defaultValues);
   const {
     register,
     handleSubmit,

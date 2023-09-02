@@ -13,34 +13,10 @@ import Register from './components/register/Register';
 import Root from './components/Root';
 import Login from './components/login/Login';
 import Transaction from './pages/transaction/Transaction';
-function App() {
-  let item = {
-    desc: 'descrio',
-    title: 'Hello title',
-    price: 300,
-    maxPeople: 2,
-    roomNumbers: [101, 102, 103],
-  };
 
-  const router = createBrowserRouter([
-    {
-      path: '/',
-      element: <Root />,
-      // errorElement:<ErrorPage/>,
-      children: [
-        { index: true, element: <Home /> },
-        { path: 'register', element: <Register /> },
-        {
-          path: 'hotels',
-          children: [
-            { index: true, element: <List /> },
-            { path: ':hotelId', element: <Hotel /> },
-          ],
-        },
-      ],
-    },
-  ]);
-  return (
+function App() {
+
+   return (
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<Home />} />
@@ -51,8 +27,7 @@ function App() {
         <Route path='/transaction/:userId' element={<Transaction />} />
       </Routes>
     </BrowserRouter>
-    // <div>hello app</div>
-    // <RouterProvider router={router} />
+ 
   );
 }
 

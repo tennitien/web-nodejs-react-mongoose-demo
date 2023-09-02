@@ -5,11 +5,11 @@ import { useState } from 'react';
 import axios from 'axios';
 import useFetch from '../../hooks/useFetch';
 import { useForm } from 'react-hook-form';
+import { roomApi } from '../../api/apiConfig';
 
 const NewHotel = ({ inputs, title }) => {
   const [postLoading, setPostLoading] = useState(false);
-
-  // const { data, loading, error } = useFetch('/rooms');
+  const { data, loading, error } = useFetch(roomApi.getAlls);
   const {
     register,
     handleSubmit,
@@ -77,14 +77,9 @@ const NewHotel = ({ inputs, title }) => {
             {/* img */}
             <div className='formInput formImg'>
               <label htmlFor='file'> Image </label>
-              {/* <input
-                type='file'
-                id='file'
-                multiple
-                {...register('photos', { required: true })}
-              /> */}
+
               <input
-                type='text'
+                type='file'
                 id='file'
                 multiple
                 {...register('photos', { required: true })}
@@ -99,7 +94,7 @@ const NewHotel = ({ inputs, title }) => {
               <select
                 className='selectFeatured'
                 id='featured'
-                // defaultValue={}
+                defaultValue={''}
                 {...register('featured', { required: true })}
               >
                 <option disabled value=''>
@@ -112,26 +107,26 @@ const NewHotel = ({ inputs, title }) => {
                 <p className='error'>{`This featured is required`}</p>
               )}
             </div>
-            {/* <div className='formInput selectRooms'>
+            <div className='formInput formRooms'>
               <label>Rooms</label>
               <select
                 id='rooms'
                 multiple
                 {...register('rooms', { required: true })}
-              > */}
-            {/* {loading
+              >
+                {loading
                   ? 'Loading...'
                   : data &&
                     data.map(room => (
                       <option key={room._id} value={room._id}>
                         {room.title}
                       </option>
-                    ))} */}
-            {/* </select>
+                    ))}
+              </select>
               {errors.rooms && (
                 <p className='error'>{`This rooms is required`}</p>
               )}
-            </div> */}
+            </div>
             <div className='formAction'>
               <input
                 type='submit'

@@ -51,18 +51,23 @@
 }
 
 .bill {
-  grid-column: 1/-1;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(2, 1fr);
+  
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 .bill-title {
   grid-column: 1/-1;
 }
 .bill .select {
-  width: 100%;
+ padding: 10px;
   text-align: center;
   background-color: #ddd;
   border-radius: 3px;
   border: solid 1px #ccc;
-}/*# sourceMappingURL=reserve.css.map */
+}
+.error{
+  color:red;
+  font-style: italic;
+  font-size: 13px;
+}

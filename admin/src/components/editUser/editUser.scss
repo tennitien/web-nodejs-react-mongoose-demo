@@ -65,33 +65,11 @@
             border-radius: 5px;
           }
         }
-
-        .formImgList {
-          width: 70%;
-          display: flex;
-          gap: 20px;
-          .imgItem,
-          .imgLabel {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            gap: 10px;
-
-            img {
-              width: 150px;
-              height: 100px;
-              object-fit: cover;
-            }
-          }
-        }
-
-        .roomList {
-          .room {
-            display: flex;
-            justify-content: space-between;
-            margin-right: 5px;
-          }
-        }
+        // .formFile {
+        //   input[type='file'] {
+        //     display: none;
+        //   }
+        // }
         .formAction {
           width: 40%;
           .submit {

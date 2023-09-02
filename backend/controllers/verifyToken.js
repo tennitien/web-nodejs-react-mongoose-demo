@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
-// todo: Youtube>> 1:12:30
+const createError = require('http-errors');
+
 exports.verifyToken = (req, res, next) => {
   const token = req.cookies.token;
   if (!token) {

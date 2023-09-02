@@ -14,10 +14,17 @@ import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined
 import { Link } from 'react-router-dom';
 import { DarkModeContext } from '../../context/darkModeContext';
 import { useContext } from 'react';
+import { AuthActions, AuthContext } from '../../context/AuthContext';
 
 const Sidebar = () => {
   const { dispatch } = useContext(DarkModeContext);
+  const { dispatch: authDispatch } = useContext(AuthContext);
+
   const nameWeb = 'Admin Page';
+
+  const handleLogout = () => {
+    authDispatch({ type: AuthActions.logout });
+  };
   return (
     <div className='sidebar'>
       <div className='top'>
@@ -29,10 +36,12 @@ const Sidebar = () => {
       <div className='center'>
         <ul>
           <p className='title'>MAIN</p>
-          <li>
-            <DashboardIcon className='icon' />
-            <span>Dashboard</span>
-          </li>
+          <Link to='/' style={{ textDecoration: 'none' }}>
+            <li>
+              <DashboardIcon className='icon' />
+              <span>Dashboard</span>
+            </li>
+          </Link>
           <p className='title'>LISTS</p>
           <Link to='/users' style={{ textDecoration: 'none' }}>
             <li>
@@ -89,10 +98,12 @@ const Sidebar = () => {
             <AccountCircleOutlinedIcon className='icon' />
             <span>Profile</span>
           </li>
-          <li>
+          {/* <Link to={'/login'} style={{ textDecoration: 'none' }}> */}
+          <li onClick={handleLogout}>
             <ExitToAppIcon className='icon' />
             <span>Logout</span>
           </li>
+          {/* </Link> */}
         </ul>
       </div>
       <div className='bottom'>

@@ -19,6 +19,7 @@ import { SearchContext } from '../../context/SearchContext';
 import { AuthContext } from '../../context/AuthContext';
 import Reserve from '../../components/reserve/Reserve';
 import Test from './Test';
+import Loading from '../../components/loading/Loading';
 
 const Hotel = () => {
   const navigate = useNavigate();
@@ -31,7 +32,7 @@ const Hotel = () => {
   const { data, loading, error } = useFetch(hotelsApi.getById(hotelId));
   const { destination, dates, options, diffDay } = useContext(SearchContext);
   const { user } = useContext(AuthContext);
-  console.log('user :>> ', user);
+  // console.log('user :>> ', user);
   const handleOpen = i => {
     setSlideNumber(i);
     setOpen(true);
@@ -61,16 +62,16 @@ const Hotel = () => {
   let description = data?.desc || '';
   let price = data?.cheapestPrice || '';
   let photos = data?.photos || '';
-  console.log(data);
+  // console.log(data);
 
   let score = 9.8;
   return (
     <>
-      {/* <Navbar /> */}
+      <Navbar />
       <Header type='list' />
 
       {loading ? (
-        'loadnign'
+        <Loading/>
       ) : (
         <div className='hotelContainer'>
           {open && (

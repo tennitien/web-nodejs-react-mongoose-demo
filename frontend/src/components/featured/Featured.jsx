@@ -4,6 +4,7 @@ import './featured.css';
 import imgHaNoi from '../../img/HaNoi.jpg';
 import imgDaNang from '../../img/DaNang.jpg';
 import imgHCM from '../../img/HCM.jpg';
+import Loading from '../loading/Loading';
 const Featured = () => {
   const { data, loading, error } = useFetch(hotelsApi.countByCity);
   const imgs = [imgHaNoi, imgHCM, imgDaNang];
@@ -15,7 +16,7 @@ const Featured = () => {
   return (
     <div className='featured'>
       {loading ? (
-        'Loading'
+       <Loading/>
       ) : (
         <>
           {listFeatured.map((item, index) => {

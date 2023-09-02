@@ -8,7 +8,7 @@ import { userApi } from '../../api/apiConfig';
 import axios from 'axios';
 import Loading from '../loading/Loading';
 
-const Datatable = ({ columns, action = true, pageSize = 9 }) => {
+const Datatable = ({ columns, action, title }) => {
   const location = useLocation();
   const pathName = location.pathname.split('/')[1];
   const path = pathName === '' ? 'transactions?limit=8' : pathName;
@@ -65,20 +65,22 @@ const Datatable = ({ columns, action = true, pageSize = 9 }) => {
         <Loading />
       ) : (
         <div className='datatable'>
-          {action && (
-            <div className='datatableTitle'>
-              Add New
+          <div className='datatableTitle'>
+            {title ? title : 'Add New'}
+
+            {action && (
               <Link to={`/${path}/new`} className='link'>
                 Add New
               </Link>
-            </div>
-          )}
+            )}
+          </div>
+
           {list && (
             <DataGrid
               className='datagrid'
               rows={list}
               columns={action ? columns.concat(actionColumn) : columns}
-              pageSize={pageSize}
+              pageSize={9}
               rowsPerPageOptions={[9]}
               checkboxSelection
               getRowId={row => row._id}

@@ -12,6 +12,7 @@ import { SearchContext } from '../../context/SearchContext';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 import axios from 'axios';
+import Loading from '../loading/Loading';
 
 // validate Form
 const phoneRegExp =
@@ -25,35 +26,24 @@ const schema = yup.object({
   phone: yup
     .string()
     .matches(phoneRegExp, 'Phone number is not valid')
-    .max(10)
+    // .length(10)
     .required('Phone is required'),
-  card: yup.string().required('Card is required'),
+  // card: yup.string().required('Card is required'),
+  payment: yup.string().required('Payment is required'),
 });
 // validate Form --end
 
 function Reserve({ hotelId, priceDefault }) {
   const navigate = useNavigate();
   const { data, loading, error } = useFetch(hotelsApi.getRooms(hotelId));
-  console.log('data :>> ', data);
   const { dates } = useContext(SearchContext);
   const { user } = useContext(AuthContext);
-  const [date, setDate] = useState([
-    {
-      startDate: new Date(dates[0].startDate),
-      endDate: new Date(dates[0].endDate),
-      key: 'selection',
-    },
-  ]);
-
-  const [dataForm, setDataForm] = useState({});
-  const [totalBill, setTotalBill] = useState(0);
-
   let defaultValues = {
     name: user.fullName,
     email: user.email,
     phone: user.phone,
-    card: '',
   };
+
   const form = useForm({ defaultValues, resolver: yupResolver(schema) });
   const {
     register,
@@ -61,27 +51,30 @@ function Reserve({ hotelId, priceDefault }) {
     formState: { errors },
   } = form;
 
+  let startDate =
+    new Date() > new Date(dates[0].startDate)
+      ? new Date()
+      : new Date(dates[0].startDate);
+  const [date, setDate] = useState([
+    {
+      startDate: startDate,
+      endDate: new Date(dates[0].endDate),
+      key: 'selection',
+    },
+  ]);
+
+  const [postLoading, setPostLoading] = useState(false);
+  const [totalBill, setTotalBill] = useState(0);
+  const [roomErr, setRoomErr] = useState(null);
+ 
+  // // ------------------ ///
   const onSubmit = async input => {
-    const { name, email, phone, card, payment, ...rooms } = input;
-    setDataForm({
-      name,
-      email,
-      phone,
-      card,
-      payment,
-      rooms,
-      startDate: date[0].startDate,
-      endDate: date[0].endDate,
-      diffDay:
-        (new Date(date[0].endDate) - new Date(date[0].startDate)) /
-          (1000 * 60 * 60 * 24) +
-        1,
-    });
-    console.log('rooms :>> ', rooms);
+    const { rooms, payment,...other } = input;
+
     let sum = 0;
     let roomArray = [];
     for (const key in rooms) {
-      if (rooms[key].roomNumbers) {
+      if (rooms[key].roomNumbers.length > 0) {
         roomArray.push({
           roomId: key,
           roomNumbers: rooms[key].roomNumbers,
@@ -91,7 +84,15 @@ function Reserve({ hotelId, priceDefault }) {
         sum += price * quantity;
       }
     }
-    setTotalBill(sum);
+    if (!roomArray.length) return setRoomErr('Room is required');
+    else setRoomErr(null)
+
+    let diffDay =
+      Math.round((new Date(date[0].endDate) - new Date(date[0].startDate)) /
+        (1000 * 60 * 60 * 24) +
+      1);
+    let totalBill = sum * diffDay;
+    setTotalBill(totalBill);
 
     let transaction = {
       userId: user._id,
@@ -100,21 +101,24 @@ function Reserve({ hotelId, priceDefault }) {
       dateStart: date[0].startDate,
       dateEnd: date[0].endDate,
       price: totalBill,
-      payment: payment,
+      payment:payment,
       status: 'Booked',
     };
-    console.log('transaction :>> ', transaction);
-    try {
-      await axios.post('/transactions', transaction);
-      navigate('/transaction');
-    } catch (error) {
-      console.log('error :>> ', error);
-    }
+    // console.log('transaction :>> ', transaction);
+    setPostLoading(true)
+    // try {
+    //   await axios.post('/transactions', transaction);
+    //   navigate(`/transaction/${user._id}`);
+    // } catch (error) {
+    //   console.log('error :>> ', error);
+    // }
+    setPostLoading(false)
+
   };
   return (
     <>
       {loading ? (
-        <p>Loading</p>
+        <Loading />
       ) : (
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className='reserve'>
@@ -160,9 +164,10 @@ function Reserve({ hotelId, priceDefault }) {
                 <p>{errors.card?.message}</p>
               </div>
             </div>
-            {/*//todo select */}
+            {/*  */}
             <div className='selectRooms'>
               <h2>Select Room</h2>
+              <p className='error'>{roomErr}</p>
 
               <div className='rooms'>
                 {data &&
@@ -185,13 +190,18 @@ function Reserve({ hotelId, priceDefault }) {
                                 <input
                                   type='checkbox'
                                   value={roomNumber}
-                                  {...register(`${room._id}.roomNumbers`)}
+                                  {...register(
+                                    `rooms.${room._id}.roomNumbers`,
+                                    {
+                                      required: true,
+                                    }
+                                  )}
                                 />
                                 <input
                                   type='text'
                                   hidden={true}
                                   value={room.price}
-                                  {...register(`${room._id}.price`)}
+                                  {...register(`rooms.${room._id}.price`)}
                                 />
                               </div>
                             ))}
@@ -202,20 +212,31 @@ function Reserve({ hotelId, priceDefault }) {
               </div>
             </div>
 
-            <div className='bill'>
+            <div className='bill '>
               <h2 className='bill-title'>
-                Total Bill: ${totalBill * dataForm.diffDay || priceDefault}
+                Total Bill: ${totalBill || priceDefault}
               </h2>
-              <select {...register('payment')} className='select'>
-                <option value='hide'>Select Payment Method</option>
+
+              <select
+                className='select'
+                id='payment'
+                defaultValue=''
+                {...register('payment', { required: true })}
+              >
+                <option disabled value=''>
+                  Select Payment Method
+                </option>
                 <option value='Credit Cart'>Credit Cart</option>
                 <option value='Cash'>Cash</option>
-                {/* <option value='Other'>Other</option> */}
               </select>
-
-              <div className='formAction'>
-                <input type='submit' value='Reserve Now' />
-              </div>
+              <p className='error'>{errors.payment?.message}</p>
+            </div>
+            <div className='formAction'>
+              <input
+                type='submit'
+                disabled={postLoading}
+                value={postLoading ? 'Sending...' : 'Reserve Now'}
+              />
             </div>
           </div>
         </form>

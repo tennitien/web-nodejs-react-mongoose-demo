@@ -1,27 +1,38 @@
 // "proxy":"http://localhost:5000/api"
 
 export const authApi = {
-  postLogin: '/auth/login',
+  adminLogin: '/auth/login/admin',
+
   newUser: '/auth/register',
 };
 export const userApi = {
   getUsers: '/users',
+  updateById: userId => {
+    return `/users/${userId}`;
+  },
 };
 export const transactionApi = {
   getSummary: '/transactions/summary',
 };
 export const hotelApi = {
   getHotels: '/hotels',
-  getById:hotelId=>{
-    return `/hotels/detail/${hotelId}`
+  getById: hotelId => {
+    return `/hotels/detail/${hotelId}`;
   },
-  updateById:hotelId=>{
-    return `/hotels/${hotelId}`
-  }
+  updateById: hotelId => {
+    return `/hotels/${hotelId}`;
+  },
 };
 
 export const roomApi = {
-  createRoom: hotelId => {
-    return `/rooms/${hotelId}`;
+  getAlls: '/rooms',
+  createRoom: roomId => {
+    return `/rooms/${roomId}`;
+  },
+  getById: roomId => {
+    return `/rooms/detail/${roomId}`;
+  },
+  updateById: roomId => {
+    return `/rooms/${roomId}`;
   },
 };

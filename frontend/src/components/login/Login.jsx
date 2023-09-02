@@ -1,59 +1,73 @@
-import React, { useContext, useState } from 'react';
+import { useContext, useState } from 'react';
 import { AuthActions, AuthContext } from '../../context/AuthContext';
 import axios from 'axios';
 import useFetch from '../../hooks/useFetch';
 import { useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import Navbar from '../navbar/Navbar';
+import { authApi } from '../../api/apiConfig';
 
 function Login() {
-  const navigate=useNavigate()
+  const navigate = useNavigate();
+  const [postLoading, setPostLoading] = useState(false);
+
   const { user, loading, error, dispatch } = useContext(AuthContext);
 
-  const [credential, setCredential] = useState({
-    username: undefined,
-    password: undefined,
-  });
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({});
 
-  const handleInput = e => {
-    setCredential(prev => ({ ...prev, [e.target.id]: e.target.value }));
-  };
-  const handleLogin = async e => {
-    e.preventDefault();
+  const onSubmit = async data => {
+    setPostLoading(true);
+
     dispatch({ type: AuthActions.login_start });
-    // "proxy": "http://localhost:5000/api"
     try {
-      const result = await axios.post('/auth/login', credential);
-      dispatch({ type: AuthActions.login_success, payload: result.data.details });
-      navigate('/')
+      const result = await axios.post(authApi.postLogin, data);
+      dispatch({
+        type: AuthActions.login_success,
+        payload: result.data.details,
+      });
+      navigate('/');
     } catch (error) {
-      console.log('error :>> ', error);
       dispatch({
         type: AuthActions.login_failure,
         payload: error.response.data,
       });
+      alert(error.response.data.message);
     }
-  };
 
+    setPostLoading(false);
+  };
   return (
-    <div className='login'>
-      <div className='lContainer'>
-        <input
-          type='text'
-          name='username'
-          id='username'
-          onChange={handleInput}
-          className='lInput'
-        />
-        <input
-          type='password'
-          name='password'
-          id='password'
-          onChange={handleInput}
-          className='lInput'
-        />
-        <button onClick={handleLogin} className='lButton' disabled={loading}>
-          Login
-        </button>
-        {error && <span>{error.message}</span>}
+    <div id='login'>
+      <Navbar />
+
+      <div className='formContainer'>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className='formControl'>
+            <label>Your User Name:</label>
+            <input {...register('username')} placeholder='User Name' />
+            <p>{errors.username?.message}</p>
+          </div>{' '}
+          <div className='formControl'>
+            <label>Your Password:</label>
+            <input
+              type='password'
+              {...register('password')}
+              placeholder='Password'
+            />
+            <p>{errors.password?.message}</p>
+          </div>{' '}
+          <div className='formAction'>
+            <input
+              type='submit'
+              disabled={postLoading}
+              value={postLoading ? 'Sending...' : 'Login'}
+            />
+          </div>
+        </form>
       </div>
     </div>
   );

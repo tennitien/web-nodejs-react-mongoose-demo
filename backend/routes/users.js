@@ -6,24 +6,15 @@ const verifyController = require('../controllers/verifyToken');
 
 const router = express.Router();
 
-router.get('/', userController.getUsers);
-// router.get(':/id', userController.getUser);
-
+// admin
+router.put('/:id', verifyController.verifyAdmin, userController.updateUser);
+router.delete('/:id', verifyController.verifyAdmin, userController.deleteUser);
 router.get('/checkauth', verifyController.verifyToken);
+router.get('/checkadmin/:id', verifyController.verifyAdmin);
 
-router.get(
-  '/checkuser/:id',
-  // verifyController.verifyToken,
-  verifyController.verifyUser
-);
-router.get(
-  '/checkadmin/:id',
-  // verifyController.verifyToken,
-  verifyController.verifyAdmin
-);
-
-router.delete('/:id', userController.deleteUser);
-// UPDATE
-router.put('/:id', userController.updateUser);
+// user
+router.get('/', userController.getUsers);
+router.get('/detail/:id', userController.getUser);
+router.get('/checkuser/:id', verifyController.verifyUser);
 
 module.exports = router;

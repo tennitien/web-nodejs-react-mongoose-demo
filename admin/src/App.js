@@ -3,19 +3,8 @@ import Login from './pages/login/Login';
 import List from './pages/list/List';
 import Single from './pages/single/Single';
 import NewUser from './pages/newUser/NewUser';
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-  Navigate,
-  createBrowserRouter,
-} from 'react-router-dom';
-import {
-  hotelInputs,
-  productInputs,
-  roomInputs,
-  userInputs,
-} from './formSource';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { hotelInputs, loginInputs, roomInputs, userInputs } from './formSource';
 import './style/dark.scss';
 import './style/app.scss';
 import { useContext } from 'react';
@@ -46,7 +35,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path='/'>
-            <Route path='login' element={<Login />} />
+            <Route path='login' element={<Login inputs={loginInputs}/>} />
             <Route
               index
               element={
@@ -68,7 +57,7 @@ function App() {
                 path=':userId'
                 element={
                   <ProtectedRoute>
-                    <NewUser inputs={userInputs} title='Add New User' />
+                    <Edit type={'users'} />
                   </ProtectedRoute>
                 }
               />
@@ -94,7 +83,7 @@ function App() {
                 path=':hotelId'
                 element={
                   <ProtectedRoute>
-                    <Edit />
+                    <Edit type={'hotels'} />
                   </ProtectedRoute>
                 }
               />
@@ -117,10 +106,10 @@ function App() {
                 }
               />
               <Route
-                path=':productId'
+                path=':roomId'
                 element={
                   <ProtectedRoute>
-                    <Single />
+                    <Edit type={'rooms'} />
                   </ProtectedRoute>
                 }
               />
@@ -138,23 +127,7 @@ function App() {
                 index
                 element={
                   <ProtectedRoute>
-                    <List columns={transactionColumns} />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path=':productId'
-                element={
-                  <ProtectedRoute>
-                    <Single />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path='new'
-                element={
-                  <ProtectedRoute>
-                    <NewRoom inputs={roomInputs} title='Add New Room' />
+                    <List columns={transactionColumns} action={false} title={'Transaction List'}/>
                   </ProtectedRoute>
                 }
               />
