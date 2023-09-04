@@ -1,6 +1,6 @@
 import useFetch from '../../hooks/useFetch';
 import { hotelsApi } from '../../api/apiConfig';
-import './featured.css';
+import './featured.scss';
 import imgHaNoi from '../../img/HaNoi.jpg';
 import imgDaNang from '../../img/DaNang.jpg';
 import imgHCM from '../../img/HCM.jpg';
@@ -16,7 +16,7 @@ const Featured = () => {
   return (
     <div className='featured'>
       {loading ? (
-       <Loading/>
+        <Loading />
       ) : (
         <>
           {listFeatured.map((item, index) => {

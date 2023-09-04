@@ -1,0 +1,85 @@
+@use  '../../scss/' as *;
+.listContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.listWrapper {
+  width: 100%;
+  max-width: $max-width-container;
+  display: flex;
+  gap: 20px;
+}
+
+.listSearch {
+  flex: 1;
+  background-color: $color-tertiary;
+  padding: 10px;
+  border-radius: 10px;
+  position: sticky;
+  top: 10px;
+  height: max-content;
+
+  .lsTitle {
+    font-size: 20px;
+    color: $color-grey-dark;
+    margin-bottom: 10px;
+  }
+
+  .lsItem {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-bottom: 10px;
+
+    label {
+      font-size: 12px;
+    }
+
+    input {
+      height: 30px;
+      border: none;
+      padding: 5px;
+    }
+
+    span {
+      height: 30px;
+      padding: 5px;
+      background-color: $color-white;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+  }
+
+  .lsOptions {
+    padding: 10px;
+
+    .lsOptionItem {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      color: $color-grey-dark;
+      font-size: 12px;
+    }
+
+    .lsOptionInput {
+      width: 50px;
+    }
+  }
+
+  button {
+    padding: 10px;
+    background-color: $color-primary-light;
+    color: $color-white;
+    border: none;
+    width: 100%;
+    font-weight: 500;
+    cursor: pointer;
+  }
+}
+
+.listResult {
+  flex: 3;
+}

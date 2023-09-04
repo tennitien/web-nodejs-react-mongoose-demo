@@ -1,6 +1,6 @@
 import useFetch from '../../hooks/useFetch';
 import { hotelsApi } from '../../api/apiConfig';
-import './propertyList.css';
+import './propertyList.scss';
 import Loading from '../loading/Loading';
 
 const PropertyList = () => {

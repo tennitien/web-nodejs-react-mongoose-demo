@@ -1,15 +1,16 @@
 import React, { useContext, useEffect } from 'react';
-import './reserve.css';
+import './reserve.scss';
 import { useState } from 'react';
 import { DateRange } from 'react-date-range';
-import { format, isDate } from 'date-fns';
+
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+
 import useFetch from '../../hooks/useFetch';
 import { hotelsApi } from '../../api/apiConfig';
 import { SearchContext } from '../../context/SearchContext';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 import axios from 'axios';
 import Loading from '../loading/Loading';
@@ -26,9 +27,9 @@ const schema = yup.object({
   phone: yup
     .string()
     .matches(phoneRegExp, 'Phone number is not valid')
-    // .length(10)
+    .length(10)
     .required('Phone is required'),
-  // card: yup.string().required('Card is required'),
+  card: yup.string().required('Card is required'),
   payment: yup.string().required('Payment is required'),
 });
 // validate Form --end
@@ -94,30 +95,9 @@ function Reserve({ hotelId, priceDefault }) {
   const onSubmit = async input => {
     const { payment, ...other } = input;
 
-    // let sum = 0;
-    // let roomArray = [];
-    // for (const key in rooms) {
-    //   if (rooms[key].roomNumbers?.length > 0) {
-    //     roomArray.push({
-    //       roomId: key,
-    //       roomNumbers: rooms[key].roomNumbers,
-    //     });
-    //     let quantity = rooms[key].roomNumbers.length;
-    //     let price = rooms[key].price;
-    //     sum += price * quantity;
-    //   }
-    // }
-
-    // let diffDay = Math.round(
-    //   (new Date(date[0].endDate) - new Date(date[0].startDate)) /
-    //     (1000 * 60 * 60 * 24) +
-    //     1
-    // );
-    // let totalBill = sum * diffDay;
-    // setTotalBill(totalBill);
     if (!roomArray.length) return setRoomErr('Room is required');
     else setRoomErr(null);
-    
+
     let transaction = {
       userId: user._id,
       hotelId: hotelId,
@@ -255,7 +235,6 @@ function Reserve({ hotelId, priceDefault }) {
               <p className='error'>{errors.payment?.message}</p>
             </div>
             <div className='formAction'>
-              {/* {!calcBill && <input type="submit" value={'Total Bill'}/>} */}
               <input
                 type='submit'
                 disabled={postLoading}

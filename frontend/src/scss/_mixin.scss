@@ -1,0 +1,14 @@
+@use './variable' as *;
+@mixin box-shadow-small() {
+  -webkit-box-shadow: 0px 0px 10px -5px rgba(0, 0, 0, 0.4);
+  box-shadow: 0px 0px 10px -5px rgba(0, 0, 0, 0.4);
+}
+@mixin box-shadow-form() {
+  -webkit-box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+@mixin title() {
+  width: $max-width-container;
+  font-size: 20px;
+  color: $color-black;
+}

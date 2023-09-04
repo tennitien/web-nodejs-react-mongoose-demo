@@ -1,6 +1,7 @@
+@use  '../../scss/' as *; 
 .pList{
   width: 100%;
-  max-width: 1024px;
+  max-width: $max-width-container;
   display: flex;
   justify-content: space-between;
   gap: 20px;
@@ -22,7 +23,7 @@
 .pListTitles>h1{
   text-transform: capitalize;
   font-size: 18px;
-  color: #444;
+  color: $color-grey-dark;
 }
 
 .pListTitles>h2{

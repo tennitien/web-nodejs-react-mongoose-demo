@@ -1,5 +1,5 @@
 {
-  "name": "booking",
+  "name": "booking-backend",
   "version": "1.0.0",
   "description": "Booking app",
   "main": "app.js",

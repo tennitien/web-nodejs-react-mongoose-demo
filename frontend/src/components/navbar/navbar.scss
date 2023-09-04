@@ -1,14 +1,15 @@
+@use  '../../scss/' as *; 
 .navbar {
   height: 50px;
-  background-color: #003580;
+  background-color:$color-primary;
   display: flex;
   justify-content: center;
 }
 
 .navContainer {
   width: 100%;
-  max-width: 1024px;
-  color: white;
+  max-width: $max-width-container;
+  color: $color-white;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -16,7 +17,7 @@
 
 .logo {
   font-weight: 500;
-  color: white;
+  color: $color-white;
   text-decoration: none;
 }
 
@@ -25,5 +26,5 @@
   border: none;
   padding: 5px 10px;
   cursor: pointer;
-  color: #003580;
+  color:$color-primary;
 }

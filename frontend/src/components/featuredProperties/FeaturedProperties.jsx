@@ -1,8 +1,9 @@
+import './featuredProperties.scss';
 import { hotelsApi } from '../../api/apiConfig';
 import useFetch from '../../hooks/useFetch';
-import './featuredProperties.css';
 import Loading from '../loading/Loading';
 import { Link } from 'react-router-dom';
+
 const FeaturedProperties = () => {
   const { data, loading, error } = useFetch(
     hotelsApi.sortBy('des', 3, 'rating')

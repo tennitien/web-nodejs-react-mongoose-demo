@@ -1,4 +1,4 @@
-import './hotel.css';
+import './hotel.scss';
 import Navbar from '../../components/navbar/Navbar';
 import Header from '../../components/header/Header';
 import MailList from '../../components/mailList/MailList';
@@ -18,7 +18,6 @@ import { hotelsApi } from '../../api/apiConfig';
 import { SearchContext } from '../../context/SearchContext';
 import { AuthContext } from '../../context/AuthContext';
 import Reserve from '../../components/reserve/Reserve';
-import Test from './Test';
 import Loading from '../../components/loading/Loading';
 
 const Hotel = () => {
@@ -32,7 +31,6 @@ const Hotel = () => {
   const { data, loading, error } = useFetch(hotelsApi.getById(hotelId));
   const { destination, dates, options, diffDay } = useContext(SearchContext);
   const { user } = useContext(AuthContext);
-  // console.log('user :>> ', user);
   const handleOpen = i => {
     setSlideNumber(i);
     setOpen(true);
@@ -50,7 +48,7 @@ const Hotel = () => {
     setSlideNumber(newSlideNumber);
   };
   const handleReserve = () => {
-    if (user.username) {
+    if (user) {
       setOpenReserve(prev => !prev);
     } else navigate('/login');
   };

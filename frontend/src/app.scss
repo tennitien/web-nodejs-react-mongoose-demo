@@ -1,0 +1,68 @@
+@use './scss/' as *;
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.formContainer {
+  width: 35%;
+  margin: 2em auto;
+  padding: 20px 40px;
+  border-radius: 10px;
+  @include box-shadow-form;
+}
+
+.formControl {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 10px auto;
+  width: 100%;
+
+  label {
+    span {
+      font-size: 12px;
+      opacity: 0.8;
+    }
+  }
+
+  input {
+    border: none;
+    padding: 10px;
+    border: 1px $color-grey solid;
+    border-radius: 3px;
+  }
+
+  p {
+    color: $color-error;
+    font-size: 13px;
+    font-style: italic;
+  }
+}
+
+.formAction {
+  display: grid;
+  place-items: center;
+
+  input {
+    font-size: 18px;
+    border: none;
+    padding: 10px 30px;
+    border: 1px $color-primary solid;
+    border-radius: 3px;
+    background-color: $color-primary;
+    color: $color-white;
+    cursor: pointer;
+
+    &:disabled {
+      cursor: not-allowed;
+    }
+
+    &:hover {
+      background-color: $color-primary-light;
+      border: 1px $color-primary-light solid;
+    }
+  }
+}

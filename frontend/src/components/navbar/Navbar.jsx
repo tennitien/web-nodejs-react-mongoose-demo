@@ -1,5 +1,5 @@
+import './navbar.scss';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
-import './navbar.css';
 import { useContext } from 'react';
 import { AuthContext, AuthActions } from '../../context/AuthContext';
 

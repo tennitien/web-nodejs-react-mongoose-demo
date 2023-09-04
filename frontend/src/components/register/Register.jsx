@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import Navbar from '../navbar/Navbar';
-import { useState } from 'react';
+import {  useState } from 'react';
 import axios from 'axios';
 import { authApi } from '../../api/apiConfig';
 import { useNavigate } from 'react-router-dom';
@@ -32,6 +32,9 @@ export default function Register() {
   } = useForm({
     resolver: yupResolver(schema),
   });
+
+
+
   const onSubmit = async data => {
     const account = { ...data, isAdmin: false };
     setPostLoading(true);

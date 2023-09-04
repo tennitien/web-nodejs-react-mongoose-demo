@@ -2,22 +2,26 @@ import { useContext, useState } from 'react';
 import { AuthActions, AuthContext } from '../../context/AuthContext';
 import axios from 'axios';
 import useFetch from '../../hooks/useFetch';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import Navbar from '../navbar/Navbar';
 import { authApi } from '../../api/apiConfig';
 
 function Login() {
   const navigate = useNavigate();
-  const [postLoading, setPostLoading] = useState(false);
-
   const { user, loading, error, dispatch } = useContext(AuthContext);
+
+  const [postLoading, setPostLoading] = useState(false);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({});
+
+  if (user) {
+    return <Navigate to='/' />;
+  }
 
   const onSubmit = async data => {
     setPostLoading(true);

@@ -1,12 +1,8 @@
-import Home from './pages/home/Home';
-import Login from './pages/login/Login';
-import List from './pages/list/List';
-import Single from './pages/single/Single';
-import NewUser from './pages/newUser/NewUser';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { hotelInputs, loginInputs, roomInputs, userInputs } from './formSource';
 import './style/dark.scss';
 import './style/app.scss';
+
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { hotelInputs, loginInputs, roomInputs, userInputs } from './formSource';
 import { useContext } from 'react';
 import { DarkModeContext } from './context/darkModeContext';
 import { AuthContext } from './context/AuthContext';
@@ -16,6 +12,11 @@ import {
   transactionColumns,
   userColumns,
 } from './datatablesource';
+
+import Home from './pages/home/Home';
+import Login from './pages/login/Login';
+import List from './pages/list/List';
+import NewUser from './pages/newUser/NewUser';
 import NewHotel from './pages/newHotel/NewHotel';
 import NewRoom from './pages/newRoom/NewRoom';
 import Edit from './pages/edit/Edit';

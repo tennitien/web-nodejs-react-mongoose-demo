@@ -1,0 +1,10 @@
+@use '../../scss/' as *;
+.transaction {
+  display: grid;
+  place-items: center;
+
+  .title {
+    @include title;
+    margin: 10px 0;
+  }
+}
