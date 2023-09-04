@@ -1,10 +1,8 @@
 import './datatable.scss';
 import { DataGrid } from '@mui/x-data-grid';
-import { userColumns, userRows } from '../../datatablesource';
 import { Link, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import useFetch from '../../hooks/useFetch';
-import { userApi } from '../../api/apiConfig';
 import axios from 'axios';
 import Loading from '../loading/Loading';
 
@@ -13,7 +11,6 @@ const Datatable = ({ columns, action, title }) => {
   const pathName = location.pathname.split('/')[1];
   const path = pathName === '' ? 'transactions?limit=8' : pathName;
   const [list, setList] = useState();
-  const [id, setId] = useState(null);
   const { data, loading, error } = useFetch(`/${path}`);
   useEffect(() => {
     setList(data);

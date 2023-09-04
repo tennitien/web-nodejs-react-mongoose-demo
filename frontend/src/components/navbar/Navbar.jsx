@@ -1,15 +1,10 @@
 import './navbar.scss';
-import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import { AuthContext, AuthActions } from '../../context/AuthContext';
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-
-  const isHideNav =
-    location.pathname === '/register' || location.pathname === '/login';
-
   const { user, dispatch } = useContext(AuthContext);
 
   const register = () => navigate('/register');
@@ -19,7 +14,6 @@ const Navbar = () => {
 
   const LoginItem = (
     <div className='navItems'>
-      {/* {user.email && user.email} */}
       <button className='navButton' onClick={register}>
         Sign Up
       </button>

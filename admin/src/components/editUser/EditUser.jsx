@@ -4,12 +4,10 @@ import Navbar from '../navbar/Navbar';
 import { useState } from 'react';
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
-import { roomApi, userApi } from '../../api/apiConfig';
-import { useNavigate } from 'react-router-dom';
+import { cloudApi, userApi } from '../../api/apiConfig';
 import DriveFolderUploadOutlinedIcon from '@mui/icons-material/DriveFolderUploadOutlined';
 
 export default function EditHotel({ inputs, title, defaultValues }) {
-  const navigate = useNavigate();
   const [file, setFile] = useState(defaultValues.img || '');
   const [postLoading, setPostLoading] = useState(false);
   const [postErr, setPostErr] = useState(false);
@@ -30,25 +28,19 @@ export default function EditHotel({ inputs, title, defaultValues }) {
     setPostLoading(true);
 
     try {
-      const uploadRes = await axios.post(
-        'https://api.cloudinary.com/v1_1/dj6nt0z1u/image/upload',
-        imgUpload
-      );
+      const uploadRes = await axios.post(cloudApi, imgUpload);
       const { url } = uploadRes.data;
       setFile(url);
       const { img, ...other } = data;
       const userUpdate = { ...other, img: url };
-      console.log('userUpdate :>> ', userUpdate);
       await axios.put(userApi.updateById(data._id), userUpdate);
 
       setPostLoading(false);
-      // alert('The user has updated');
     } catch (error) {
       console.log('error :>> ', error);
       setPostErr(true);
     }
     alert(postErr ? 'Can not update' : 'The user has updated');
-    // navigate('/users');
   };
   return (
     <div className='new'>

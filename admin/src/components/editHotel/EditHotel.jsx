@@ -3,9 +3,8 @@ import Sidebar from '../sidebar/Sidebar';
 import Navbar from '../navbar/Navbar';
 import { useState } from 'react';
 import axios from 'axios';
-import useFetch from '../../hooks/useFetch';
 import { useForm } from 'react-hook-form';
-import { Button, IconButton, Stack } from '@mui/material';
+import { Stack } from '@mui/material';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { hotelApi } from '../../api/apiConfig';
 import { useNavigate } from 'react-router-dom';
@@ -14,11 +13,9 @@ export default function EditHotel({ inputs, title, defaultValues }) {
   const navigate = useNavigate();
   const [postLoading, setPostLoading] = useState(false);
   const { photos, rooms, ...other } = defaultValues;
-  console.log('defaultValues :>> ', defaultValues);
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm({
     defaultValues: { ...other },
@@ -110,7 +107,6 @@ export default function EditHotel({ inputs, title, defaultValues }) {
                 <option value={true}>Yes</option>
               </select>
             </div>
-            {/* img */}
             <div className='formImgList'>
               <div className='imgLabel'>
                 <label>Images</label>
@@ -118,7 +114,6 @@ export default function EditHotel({ inputs, title, defaultValues }) {
                   <DeleteForeverIcon />
                 </span>
               </div>
-              {/* <div className='imgList'> */}
               {photos &&
                 photos.map((photo, i) => (
                   <div className='imgItem' key={i}>
@@ -130,15 +125,9 @@ export default function EditHotel({ inputs, title, defaultValues }) {
                         {...register('photosDeleted')}
                       />
                     </span>
-                    {/* <Button
-                      variant='outlined'
-                      startIcon={<DeleteForeverIcon />}
-                    >
-                      Delete
-                    </Button> */}
+                  
                   </div>
                 ))}
-              {/* </div> */}
             </div>
 
             <div className='formAction'>

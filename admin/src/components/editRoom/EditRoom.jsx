@@ -3,11 +3,8 @@ import Sidebar from '../sidebar/Sidebar';
 import Navbar from '../navbar/Navbar';
 import { useState } from 'react';
 import axios from 'axios';
-import useFetch from '../../hooks/useFetch';
 import { useForm } from 'react-hook-form';
-import { Button, IconButton, Stack } from '@mui/material';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import { hotelApi, roomApi } from '../../api/apiConfig';
+import {  roomApi } from '../../api/apiConfig';
 import { useNavigate } from 'react-router-dom';
 
 export default function EditHotel({ inputs, title, defaultValues }) {
@@ -24,9 +21,9 @@ export default function EditHotel({ inputs, title, defaultValues }) {
 
   const onSubmit = async data => {
     const { roomNumbers, ...other } = data;
-    const tranformRoom = roomNumbers.split(',').map(room => parseInt(room));
+    const transformRoom = roomNumbers.split(',').map(room => parseInt(room));
 
-    const roomUpdate = { ...other, roomNumbers: tranformRoom };
+    const roomUpdate = { ...other, roomNumbers: transformRoom };
 
     setPostLoading(true);
     try {

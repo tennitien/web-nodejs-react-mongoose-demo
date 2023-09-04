@@ -1,5 +1,4 @@
 const express = require('express');
-const jwt = require('jsonwebtoken');
 
 const userController = require('../controllers/user');
 const verifyController = require('../controllers/verifyToken');

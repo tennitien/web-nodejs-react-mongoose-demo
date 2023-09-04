@@ -10,7 +10,6 @@ router.put(
   roomController.updateRoomAvailability
 );
 router.put('/:id', verifyAdmin, roomController.updateRoom);
-// router.delete('/:roomid/:hotelid', verifyAdmin, roomController.deleteRoom);
 router.delete('/:id', verifyAdmin, roomController.deleteRoom);
 // user
 router.get('/detail/:id', roomController.getRoom);

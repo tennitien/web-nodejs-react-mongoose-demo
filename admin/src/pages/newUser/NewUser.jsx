@@ -1,12 +1,17 @@
 import './newUser.scss';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import Sidebar from '../../components/sidebar/Sidebar';
 import Navbar from '../../components/navbar/Navbar';
 import DriveFolderUploadOutlinedIcon from '@mui/icons-material/DriveFolderUploadOutlined';
-import { useState } from 'react';
 import axios from 'axios';
-import { authApi } from '../../api/apiConfig';
+import { authApi, cloudApi } from '../../api/apiConfig';
 
 const NewUser = ({ inputs, title }) => {
+  const navigate = useNavigate();
+  const [postLoading, setPostLoading] = useState(false);
+
   const [file, setFile] = useState('');
   const [info, setInfo] = useState('');
   const handleInput = e => {
@@ -17,21 +22,21 @@ const NewUser = ({ inputs, title }) => {
     const data = new FormData();
     data.append('file', file);
     data.append('upload_preset', 'upload');
+
+    setPostLoading(true);
     try {
-      const uploadRes = await axios.post(
-        `https://api.cloudinary.com/v1_1/dj6nt0z1u/image/upload`,
-        // `https://api.cloudinary.com/v1_1/${process.env.CLOUDNAME}/image/upload`,
-        data
-      );
-      console.log('cloudUser::: ', uploadRes.data);
+      const uploadRes = await axios.post(cloudApi, data);
       const { url } = uploadRes.data;
-      const newUser = {
-        ...info,
-        img: url,
-      };
-      console.log('newUser :>> ', newUser);
+      const newUser = { ...info, img: url };
+
       await axios.post(authApi.newUser, newUser);
-    } catch (err) {}
+      alert('Add a New User!');
+      navigate('/');
+    } catch (err) {
+      alert(err.response.data.message);
+    }
+    setPostLoading(false);
+
   };
   return (
     <div className='new'>
@@ -77,7 +82,7 @@ const NewUser = ({ inputs, title }) => {
                   />
                 </div>
               ))}
-              <button onClick={handleSend}>Send</button>
+              <button onClick={handleSend}>{postLoading? 'Loading...':'Send'}</button>
             </form>
           </div>
         </div>

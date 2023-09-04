@@ -35,7 +35,6 @@ exports.register = async (req, res, next) => {
   }
 };
 
-exports.getLogin = async (req, res, next) => {};
 
 exports.postLogin = async (req, res, next) => {
   try {

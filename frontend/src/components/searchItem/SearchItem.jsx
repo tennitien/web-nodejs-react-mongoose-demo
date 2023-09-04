@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 
 const SearchItem = ({ item }) => {
   let name = item.name;
-  // let title = item.title;
   let address = item.address;
   let distance = item.distance;
   let description = item.desc;

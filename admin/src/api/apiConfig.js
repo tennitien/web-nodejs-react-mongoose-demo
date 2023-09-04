@@ -36,3 +36,6 @@ export const roomApi = {
     return `/rooms/${roomId}`;
   },
 };
+
+export const cloudApi= 'https://api.cloudinary.com/v1_1/dj6nt0z1u/image/upload';
+        // `https://api.cloudinary.com/v1_1/${process.env.CLOUDNAME}/image/upload`,

@@ -1,7 +1,6 @@
 import './newRoom.scss';
 import Sidebar from '../../components/sidebar/Sidebar';
 import Navbar from '../../components/navbar/Navbar';
-import DriveFolderUploadOutlinedIcon from '@mui/icons-material/DriveFolderUploadOutlined';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import useFetch from '../../hooks/useFetch';
@@ -9,7 +8,6 @@ import { hotelApi, roomApi } from '../../api/apiConfig';
 import axios from 'axios';
 
 const NewRoom = ({ inputs, title }) => {
-  const [file, setFile] = useState('');
   const [postLoading, setPostLoading] = useState(false);
   const { data, loading, error } = useFetch(hotelApi.getHotels);
   const {
