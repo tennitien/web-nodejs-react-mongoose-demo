@@ -15,12 +15,13 @@
 ## First thing:
 
 - To get started with this project, it's essential to run the backend first. The backend is built using Node.js, Express.js, MongoDB, and Mongoose.
+- Optionally, use MongoDB Compass to monitor the database efficiently.
 
 ## FrontEnd Page Preview
 
 ### Home
 
-![home](https://github.com/tennitien/web-nodejs-react-mongoose-demo/assets/136183299/de41a677-c856-4284-bbc0-af36380a83ac)>
+![home](https://github.com/tennitien/web-nodejs-react-mongoose-demo/assets/136183299/de41a677-c856-4284-bbc0-af36380a83ac)
 
 ### Search
 
@@ -40,6 +41,6 @@
 
 ![hotel](https://github.com/tennitien/web-nodejs-react-mongoose-demo/assets/136183299/cd40c798-2925-41d5-b651-691639135356)
 
-### Reserve
+### New Hotel
 
 ![newHotel](https://github.com/tennitien/web-nodejs-react-mongoose-demo/assets/136183299/b4bb26f1-5940-46fc-8c4a-a1cb97250ad8)
